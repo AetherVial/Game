@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+    display: flex;
+    justify-content: left;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    /* border: 3px solid blue; */
+    margin: 0;
+    scroll-behavior: none;
+}
+#game {
+    /* border: 3px solid red; */
+}
