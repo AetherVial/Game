@@ -1,5 +1,5 @@
 import Particle from './particle';
-
+import EnemyParticle from './enemy_particle';
 //     W: 87,
 //     A: 65,
 //     S: 83,
@@ -73,6 +73,13 @@ class Player {
         this.game.add(bullet);
     }
 
+    checkDead() {
+        if (this.hp <= 0) {
+            this.alive = false;
+            this.pos = [];
+        }
+    }
+
     mountController() {
         document.addEventListener('keydown', (e) => {
             this.keyDown[e.keyCode] = true;
@@ -100,8 +107,6 @@ class Player {
 
         document.addEventListener('click', (e) => {
             this.fire(this.game, this.pos, this.crosshair);
-            console.log(this.game.enemy.alive)
-            console.log(this.game.enemy.hp)
         })
 
         document.addEventListener('keydown', (e) => {
@@ -139,7 +144,7 @@ class Player {
 
     chargeAtk() {
         this.game.particles.forEach(el => {
-            if (el instanceof Particle) {
+            if (el instanceof EnemyParticle) {
                 el.alive = false;
             }
         })
@@ -162,6 +167,7 @@ class Player {
         if (this.charge < 100) {
             this.charge += .02;
         }
+        this.checkDead()
     }
 }
 

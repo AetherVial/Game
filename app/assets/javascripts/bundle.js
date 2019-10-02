@@ -95,6 +95,8 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+
 class Boss {
     constructor(game) {
         this.hp = 1000;
@@ -107,13 +109,13 @@ class Boss {
         this.game = game;
         this.alive = true;
         this.up = true;
+        this.loaded = true;
     }
 
     move(dt) {
         if (this.up) {
             this.y = this.y - this.y_speed * dt
         } else {
-            // console.log(this.up);
             this.y = this.y + this.y_speed * dt
         }
     }
@@ -121,15 +123,13 @@ class Boss {
 
     update(dt) {
         this.checkDead();
-        // console.log(this.game.canvas.height);
         if (this.y >= this.game.canvas.height - this.r) {
-            // console.log(this.y);
             this.up = true;
         } else if (this.y <= this.r) {
-            console.log('we made it bois')
             this.up = false;
         }
         this.move(dt);
+        this.fire();
     }
 
     checkDead() {
@@ -138,8 +138,20 @@ class Boss {
             this.pos = [];
             this.x = null;
             this.y = null;
+        }   
+    }
+
+    fire() {
+        if (this.loaded) {
+            let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, [this.x, this.y], [-1, 0]);
+            this.game.add(bullet);
+            this.loaded = false;
+            setTimeout(() => {
+                this.loaded = true;
+            }, 500)
+        } else {
+            return;
         }
-        
     }
 
 
@@ -159,6 +171,62 @@ class Boss {
 
 /***/ }),
 
+/***/ "./javascripts/enemy_particle.js":
+/*!***************************************!*\
+  !*** ./javascripts/enemy_particle.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
+
+class EnemyParticle {
+    constructor(game, pos, vel) {
+        this.pos = pos.slice();
+        this.x = this.pos[0];
+        this.y = this.pos[1];
+        this.r = 50;
+        this.ctx = game.ctx;
+        this.vel = vel;
+        this.damage = 50;
+        this.alive = true;
+        this.game = game;
+    }
+
+    dist(pos1, pos2) {
+        return Math.sqrt(
+            Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
+        );
+    }
+
+    enemyCollidesWith() {
+        if (this.dist([this.x, this.y], [this.game.player.pos[0], this.game.player.pos[1]]) < (this.r + this.game.player.radius)) {
+            this.alive = false;
+            this.game.player.hp -= 50;
+        }
+    }
+
+    update(dt) {
+        this.x = this.x + dt * this.vel[0];
+        this.y = this.y + dt * this.vel[1];
+    }
+
+
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "red";
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (EnemyParticle);
+
+/***/ }),
+
 /***/ "./javascripts/game.js":
 /*!*****************************!*\
   !*** ./javascripts/game.js ***!
@@ -170,8 +238,10 @@ class Boss {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./javascripts/player.js");
 /* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
-/* harmony import */ var _hud__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hud */ "./javascripts/hud.js");
-/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+/* harmony import */ var _hud__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hud */ "./javascripts/hud.js");
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
+
 
 
 
@@ -188,7 +258,7 @@ class Game {
     }
 
     add(object) {
-        if (object instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+        if (object instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"] || object instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
             this.particles.push(object);
         }
     }
@@ -203,8 +273,8 @@ class Game {
     start() {
         this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this);
         this.player.mountController();
-        this.hud = new _hud__WEBPACK_IMPORTED_MODULE_2__["default"](this);
-        this.enemy = new _enemy__WEBPACK_IMPORTED_MODULE_3__["default"](this);
+        this.hud = new _hud__WEBPACK_IMPORTED_MODULE_3__["default"](this);
+        this.enemy = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this);
         this.particles.push(this.player);
         this.particles.push(this.enemy);
     }
@@ -222,6 +292,11 @@ class Game {
                     this.checkBounds(el);
                     el.collidesWith();
                 }
+                if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+                    this.checkBounds(el);
+                    el.enemyCollidesWith();
+                }
+
             }
         })
         this.hud.draw();
@@ -382,7 +457,7 @@ class Particle {
         // this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-        this.ctx.fillStyle = "red";
+        this.ctx.fillStyle = "#00ffee";
         this.ctx.fill();
         this.ctx.closePath();
         // this.ctx.restore();
@@ -403,6 +478,7 @@ class Particle {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
 
 
 //     W: 87,
@@ -478,6 +554,13 @@ class Player {
         this.game.add(bullet);
     }
 
+    checkDead() {
+        if (this.hp <= 0) {
+            this.alive = false;
+            this.pos = [];
+        }
+    }
+
     mountController() {
         document.addEventListener('keydown', (e) => {
             this.keyDown[e.keyCode] = true;
@@ -505,8 +588,6 @@ class Player {
 
         document.addEventListener('click', (e) => {
             this.fire(this.game, this.pos, this.crosshair);
-            console.log(this.game.enemy.alive)
-            console.log(this.game.enemy.hp)
         })
 
         document.addEventListener('keydown', (e) => {
@@ -544,7 +625,7 @@ class Player {
 
     chargeAtk() {
         this.game.particles.forEach(el => {
-            if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+            if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
                 el.alive = false;
             }
         })
@@ -567,6 +648,7 @@ class Player {
         if (this.charge < 100) {
             this.charge += .02;
         }
+        this.checkDead()
     }
 }
 

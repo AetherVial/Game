@@ -1,3 +1,4 @@
+import EnemyParticle from './enemy_particle';
 class Boss {
     constructor(game) {
         this.hp = 1000;
@@ -10,13 +11,13 @@ class Boss {
         this.game = game;
         this.alive = true;
         this.up = true;
+        this.loaded = true;
     }
 
     move(dt) {
         if (this.up) {
             this.y = this.y - this.y_speed * dt
         } else {
-            // console.log(this.up);
             this.y = this.y + this.y_speed * dt
         }
     }
@@ -24,15 +25,13 @@ class Boss {
 
     update(dt) {
         this.checkDead();
-        // console.log(this.game.canvas.height);
         if (this.y >= this.game.canvas.height - this.r) {
-            // console.log(this.y);
             this.up = true;
         } else if (this.y <= this.r) {
-            console.log('we made it bois')
             this.up = false;
         }
         this.move(dt);
+        this.fire();
     }
 
     checkDead() {
@@ -41,8 +40,20 @@ class Boss {
             this.pos = [];
             this.x = null;
             this.y = null;
+        }   
+    }
+
+    fire() {
+        if (this.loaded) {
+            let bullet = new EnemyParticle(game, [this.x, this.y], [-1, 0]);
+            this.game.add(bullet);
+            this.loaded = false;
+            setTimeout(() => {
+                this.loaded = true;
+            }, 500)
+        } else {
+            return;
         }
-        
     }
 
 

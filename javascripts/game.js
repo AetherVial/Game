@@ -1,5 +1,6 @@
 import Player from './player';
 import Particle from './particle';
+import EnemyParticle from './enemy_particle';
 import HUD from './hud';
 import Enemy from './enemy';
 
@@ -14,7 +15,7 @@ class Game {
     }
 
     add(object) {
-        if (object instanceof Particle) {
+        if (object instanceof Particle || object instanceof EnemyParticle) {
             this.particles.push(object);
         }
     }
@@ -48,6 +49,11 @@ class Game {
                     this.checkBounds(el);
                     el.collidesWith();
                 }
+                if (el instanceof EnemyParticle) {
+                    this.checkBounds(el);
+                    el.enemyCollidesWith();
+                }
+
             }
         })
         this.hud.draw();
