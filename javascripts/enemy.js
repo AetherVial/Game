@@ -43,6 +43,7 @@ class Boss {
             this.pos = [];
             this.x = null;
             this.y = null;
+            this.r = 0;
             this.game.enemies.shift();
             setTimeout(() => {
                 console.log(this.game.enemies);

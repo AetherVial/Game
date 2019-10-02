@@ -141,6 +141,7 @@ class Boss {
             this.pos = [];
             this.x = null;
             this.y = null;
+            this.r = 0;
             this.game.enemies.shift();
             setTimeout(() => {
                 console.log(this.game.enemies);
@@ -259,6 +260,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.pos = [];
             this.x = null;
             this.y = null;
+            this.r = 0;
             this.game.enemies.shift();
             // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
         }
@@ -267,7 +269,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
     fire() {
         if (this.loaded) {
             for (let i = 5; i < 365; i += 10) {
-                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
+                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
                 setTimeout(() => {
                     this.game.add(bullet);
                 }, 200);
@@ -576,7 +578,7 @@ class Particle {
         this.r = 3;
         this.ctx = game.ctx;
         this.vel = [1,1];
-        this.damage = 1000;
+        this.damage = 100;
         this.alive = true;
     }
 

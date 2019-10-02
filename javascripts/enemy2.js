@@ -45,6 +45,7 @@ class Boss2 extends Boss{
             this.pos = [];
             this.x = null;
             this.y = null;
+            this.r = 0;
             this.game.enemies.shift();
             // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
         }
@@ -53,7 +54,7 @@ class Boss2 extends Boss{
     fire() {
         if (this.loaded) {
             for (let i = 5; i < 365; i += 10) {
-                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
+                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
                 setTimeout(() => {
                     this.game.add(bullet);
                 }, 200);
