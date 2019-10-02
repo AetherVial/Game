@@ -3,6 +3,7 @@ import Particle from './particle';
 import EnemyParticle from './enemy_particle';
 import HUD from './hud';
 import Enemy from './enemy';
+import Enemy2 from './enemy2';
 
 class Game {
     constructor(ctx, canvas) {
@@ -12,6 +13,7 @@ class Game {
         this.dt = 0;
         this.prevTime = Date.now();
         this.particles = [];
+        this.enemies = [];
     }
 
     add(object) {
@@ -31,9 +33,17 @@ class Game {
         this.player = new Player(this);
         this.player.mountController();
         this.hud = new HUD(this);
+        
         this.enemy = new Enemy(this);
+        this.enemies.push(this.enemy);
+        this.enemy2 = new Enemy2(this);
+        // this.enemy = new Enemy2(this);
+        this.enemies.push(this.enemy2);
+
         this.particles.push(this.player);
-        this.particles.push(this.enemy);
+        console.log(this.enemy)
+        this.particles.push(this.enemies[0]);
+        console.log(this.particles);
     }
 
     loop() {
@@ -53,7 +63,6 @@ class Game {
                     this.checkBounds(el);
                     el.enemyCollidesWith();
                 }
-
             }
         })
         this.hud.draw();

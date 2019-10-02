@@ -22,9 +22,9 @@ class HUD {
         this.ctx.stroke();
 
         this.ctx.beginPath();
-        this.ctx.rect(10, this.canvas.height - 60, game.enemy.hp * 1.5, 25);
+        this.ctx.rect(10, this.canvas.height - 60, ((this.canvas.width - 20) * (this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.fillStyle = '#702413';
-        this.ctx.fillRect(10, this.canvas.height - 60, game.enemy.hp * 1.5, 25);
+        this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.stroke();
     }
 }

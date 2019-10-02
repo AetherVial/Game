@@ -11,7 +11,7 @@ class Particle {
         this.r = 3;
         this.ctx = game.ctx;
         this.vel = [1,1];
-        this.damage = 50;
+        this.damage = 1000;
         this.alive = true;
     }
 

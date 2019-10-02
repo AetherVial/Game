@@ -1,10 +1,12 @@
 import EnemyParticle from './enemy_particle';
-class Boss {
+import Boss from './enemy';
+class Boss2 extends Boss{
     constructor(game) {
-        this.hp = 1000;
-        this.og_hp = 1000;
-        this.r = 200;
-        this.pos = [game.canvas.width - 200, game.canvas.height];
+        super(game);
+        this.hp = 4000;
+        this.og_hp = 4000;
+        this.r = 100;
+        this.pos = [game.canvas.width / 4, game.canvas.height / 4];
         this.x = this.pos[0]
         this.y = this.pos[1]
         this.y_speed = .3;
@@ -16,13 +18,13 @@ class Boss {
         this.loaded2 = true;
     }
 
-    move(dt) {
-        if (this.up) {
-            this.y = this.y - this.y_speed * dt
-        } else {
-            this.y = this.y + this.y_speed * dt
-        }
-    }
+    // move(dt) {
+    //     if (this.up) {
+    //         this.y = this.y - this.y_speed * dt
+    //     } else {
+    //         this.y = this.y + this.y_speed * dt
+    //     }
+    // }
 
 
     update(dt) {
@@ -32,7 +34,7 @@ class Boss {
         } else if (this.y <= this.r) {
             this.up = false;
         }
-        this.move(dt);
+        // this.move(dt);
         this.fire2();
         this.fire();
     }
@@ -44,22 +46,22 @@ class Boss {
             this.x = null;
             this.y = null;
             this.game.enemies.shift();
-            setTimeout(() => {
-                console.log(this.game.enemies);
-                this.game.particles.push(this.game.enemies[0]);
-                this.game.enemy = this.game.enemies[0];
-            }, 10000)
-        }   
+            // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
+        }
     }
 
     fire() {
         if (this.loaded) {
-            let bullet = new EnemyParticle(game, 50, [this.x, this.y], [-1, 0]);
-            this.game.add(bullet);
-            this.loaded = false;
-            setTimeout(() => {
-                this.loaded = true;
-            }, 2000)
+            for (let i = 5; i < 365; i += 10) {
+                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
+                setTimeout(() => {
+                    this.game.add(bullet);
+                }, 200);
+                this.loaded = false;
+                setTimeout(() => {
+                    this.loaded = true;
+                }, 10000)
+            }
         } else {
             return;
         }
@@ -74,15 +76,15 @@ class Boss {
             // setTimeout(() => {
             //     this.loaded = true;
             // }, 500)
-            for (let i = 0; i < 90; i+=10) {
-                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, Math.cos(i)]);
+            for (let i = 0; i < 360; i += 10) {
+                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
                 this.game.add(bullet);
             }
             this.loaded2 = false;
             setTimeout(() => {
                 this.loaded2 = true;
-            }, 500)
-        } 
+            }, 1000)
+        }
 
     }
 
@@ -99,4 +101,4 @@ class Boss {
     }
 }
 
-export default Boss;
+export default Boss2;
