@@ -86,6 +86,79 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./javascripts/enemy.js":
+/*!******************************!*\
+  !*** ./javascripts/enemy.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+class Boss {
+    constructor(game) {
+        this.hp = 1000;
+        this.r = 200;
+        this.pos = [game.canvas.width - 200, game.canvas.height];
+        this.x = this.pos[0]
+        this.y = this.pos[1]
+        this.y_speed = .3;
+        this.ctx = game.ctx;
+        this.game = game;
+        this.alive = true;
+        this.up = true;
+    }
+
+    move(dt) {
+        if (this.up) {
+            this.y = this.y - this.y_speed * dt
+        } else {
+            // console.log(this.up);
+            this.y = this.y + this.y_speed * dt
+        }
+    }
+
+
+    update(dt) {
+        this.checkDead();
+        // console.log(this.game.canvas.height);
+        if (this.y >= this.game.canvas.height - this.r) {
+            // console.log(this.y);
+            this.up = true;
+        } else if (this.y <= this.r) {
+            console.log('we made it bois')
+            this.up = false;
+        }
+        this.move(dt);
+    }
+
+    checkDead() {
+        if (this.hp <= 0) {
+            this.alive = false;
+            this.pos = [];
+            this.x = null;
+            this.y = null;
+        }
+        
+    }
+
+
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        this.ctx.strokeStyle = "#000";
+        this.ctx.fillStyle = "#000";
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Boss);
+
+/***/ }),
+
 /***/ "./javascripts/game.js":
 /*!*****************************!*\
   !*** ./javascripts/game.js ***!
@@ -96,6 +169,12 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./javascripts/player.js");
+/* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
+/* harmony import */ var _hud__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hud */ "./javascripts/hud.js");
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
+
+
+
 
 
 class Game {
@@ -103,21 +182,52 @@ class Game {
         this.canvas = canvas;
         this.ctx = ctx;
         this.loop = this.loop.bind(this);
-        this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](canvas, ctx)
+        this.dt = 0;
+        this.prevTime = Date.now();
+        this.particles = [];
+    }
+
+    add(object) {
+        if (object instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+            this.particles.push(object);
+        }
+    }
+
+
+    checkBounds(particle) {
+        if (particle.x >= this.canvas.width || particle.x <= 0 || particle.y >= this.canvas.height || particle.y <= 0) {
+            particle.alive = false;
+        }
     }
 
     start() {
-        // console.log('hi')
-        this.player.draw();
+        this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this);
         this.player.mountController();
+        this.hud = new _hud__WEBPACK_IMPORTED_MODULE_2__["default"](this);
+        this.enemy = new _enemy__WEBPACK_IMPORTED_MODULE_3__["default"](this);
+        this.particles.push(this.player);
+        this.particles.push(this.enemy);
     }
 
     loop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.player.draw();
+        this.particles = this.particles.filter(el => {
+            if (el.alive) return el;
+        })
+        this.particles.forEach(el => {
+            if (el.alive) {
+                el.draw();
+                el.update(this.dt);
+                if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+                    this.checkBounds(el);
+                    el.collidesWith();
+                }
+            }
+        })
+        this.hud.draw();
+        this.dt = Date.now() - this.prevTime;
+        this.prevTime = Date.now();
         window.requestAnimationFrame(this.loop);
-        // this.player.move();
-        // console.log(this.player)
     }
 }
 
@@ -125,33 +235,48 @@ class Game {
 
 /***/ }),
 
-/***/ "./javascripts/game_object.js":
-/*!************************************!*\
-  !*** ./javascripts/game_object.js ***!
-  \************************************/
+/***/ "./javascripts/hud.js":
+/*!****************************!*\
+  !*** ./javascripts/hud.js ***!
+  \****************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-class GameObject {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.x_speed = 0;
-        this.y_speed = 5;
-        this.radius = 10;
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
+
+
+class HUD {
+    constructor(game) {
+        this.game = game;
+        this.player = game.player;
+        this.ctx = game.ctx;
+        this.canvas = game.canvas;
     }
 
-    render() {
-        context.beginPath();
-        context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-        context.fillStyle = "#FFFFFF";
-        context.fill();
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.rect(10,10,game.player.hp * 2, 50);
+        this.ctx.fillStyle = '#32a852';
+        this.ctx.fillRect(10, 10, game.player.hp * 2, 50);
+        this.ctx.stroke();
+
+        this.ctx.beginPath();
+        this.ctx.rect(10,70,game.player.charge * 3, 25);
+        this.ctx.fillStyle = '#00ffee';
+        this.ctx.fillRect(10, 70, game.player.charge * 3, 25);
+        this.ctx.stroke();
+
+        this.ctx.beginPath();
+        this.ctx.rect(10, this.canvas.height - 60, game.enemy.hp * 1.5, 25);
+        this.ctx.fillStyle = '#702413';
+        this.ctx.fillRect(10, this.canvas.height - 60, game.enemy.hp * 1.5, 25);
+        this.ctx.stroke();
     }
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (GameObject);
+/* harmony default export */ __webpack_exports__["default"] = (HUD);
 
 /***/ }),
 
@@ -180,17 +305,91 @@ window.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        // ctx.fillStyle = "#222";
+        ctx.fillStyle = "#222222";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     const game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas);
+    document.body.style.cursor = "crosshair";
+
     window.game = game;
-    // game.player.draw();
-    // game.player.mountController();
     game.start();
     game.loop();
 })
 
 
+
+/***/ }),
+
+/***/ "./javascripts/particle.js":
+/*!*********************************!*\
+  !*** ./javascripts/particle.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
+/* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./player */ "./javascripts/player.js");
+
+
+// import Enemy from './enemy';
+
+class Particle {
+    constructor(game, pos, crosshair) {
+        this.pos = pos.slice();
+        this.crosshair = crosshair;
+        this.x = this.pos[0];
+        this.y = this.pos[1];
+        this.r = 3;
+        this.ctx = game.ctx;
+        this.vel = [1,1];
+        this.damage = 50;
+        this.alive = true;
+    }
+
+    dist(pos1, pos2) {
+        return Math.sqrt(
+            Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
+        );
+    }
+
+    collidesWith() {
+        if (this.dist([this.x, this.y], [game.enemy.x, game.enemy.y]) < (this.r + game.enemy.r) ) {
+            this.alive = false;
+
+            if (game.player.charge < 90) {
+                (game.player.charge += 10);
+            } else {
+                game.player.charge = 100;
+            }
+
+            if (game.enemy.hp > 0) {
+                game.enemy.hp -= this.damage;
+            } else if (game.enemy.hp - this.damage < 0){
+                game.enemy.hp = 0;
+            }
+        }
+    }
+
+    update(dt) {
+        let length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)))
+        this.x = this.x + ((this.crosshair[0] - this.pos[0]) / length) * dt * this.vel[0];
+        this.y = this.y + ((this.crosshair[1] - this.pos[1]) / length) * dt * this.vel[1];
+    }
+
+
+    draw() {
+        // this.ctx.save();
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        this.ctx.fillStyle = "red";
+        this.ctx.fill();
+        this.ctx.closePath();
+        // this.ctx.restore();
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Particle);
 
 /***/ }),
 
@@ -203,7 +402,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _game_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game_object */ "./javascripts/game_object.js");
+/* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
 
 
 //     W: 87,
@@ -217,53 +416,157 @@ __webpack_require__.r(__webpack_exports__);
 //     SPACE: 32,
 //     MOUSE_LEFT: 10000,
 //     MOUSE_RIGHT: 10002,
+
 class Player {
-    constructor(canvas, ctx) {
-        // this.game = game;
+    constructor(game) {
+        this.game = game;
         this.radius = 10;
-        this.pos = [canvas.width / 2, canvas.height / 2];
-        this.x_speed = 0;
-        this.y_speed = 0;
-        this.canvas = canvas;
-        this.ctx = ctx;
+        this.pos = [game.canvas.width / 2, game.canvas.height / 2];
+        this.x_speed = .35;
+        this.y_speed = .35;
+        this.canvas = game.canvas;
+        this.ctx = game.ctx;
         this.keyDown = {
             87: false,
             65: false,
             83: false,
-            68: false
+            68: false,
+            16: false,
         }
+        this.crosshair = [];
+        this.dashCooldown = 3000;
+        this.dashDisabled = false;
+        this.hp = 300;
+        this.invuln = false;
+        this.charge = 0;
+        this.alive = true;
     }
 
     move(x, y) {
         this.pos[0] += x;
         this.pos[1] += y;
-        this.x_speed = x;
-        this.y_speed = y;
+        if (this.pos[0] < 0 ) {
+            this.pos[0] = 0;
+        } else if (this.pos[1] < 0) {
+            this.pos[1] = 0;
+        } else if (this.pos[0] + this.radius > this.canvas.width) {
+            this.pos[0] = this.canvas.width - this.radius;
+        } else if (this.pos[1] + this.radius > this.canvas.height) {
+            this.pos[1] = this.canvas.height - this.radius;
+        }
+    }
+
+    dash() {
+        if (!this.dashDisabled) {
+            this.x_speed = this.x_speed * 4;
+            this.y_speed = this.y_speed * 4;
+            this.invuln = true;
+            setTimeout(() => {
+                this.x_speed = this.x_speed / 4;
+                this.y_speed = this.y_speed / 4;
+                this.invuln = false;
+            }, 100);
+            this.dashDisabled = true;
+            setTimeout(() => this.dashDisabled = false, this.dashCooldown)
+        } else {
+            console.log('im on cooldown dude')
+        }
+    }
+
+    fire(game, pos, crosshair) {
+        let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+        this.game.add(bullet);
     }
 
     mountController() {
         document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 87) {
-                this.move(0, -5);
-            } else if (e.keyCode === 83) {
-                this.move(0, 5);
-            } else if (e.keyCode === 65) {
-                this.move(-5, 0);
-            } else if (e.keyCode === 68) {
-                this.move(5, 0);
+            this.keyDown[e.keyCode] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            this.keyDown[e.keyCode] = false;
+        })
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 49) {
+                this.dash(this.x_speed, this.y_speed);
             }
         })
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 187) {
+                this.charge = 100;
+            }
+        })
+
+        document.addEventListener('mousemove', (e) => {
+            this.setAim(e);
+        })
+
+        document.addEventListener('click', (e) => {
+            this.fire(this.game, this.pos, this.crosshair);
+            console.log(this.game.enemy.alive)
+            console.log(this.game.enemy.hp)
+        })
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 69) {
+                if (this.charge >= 50) {
+                    this.chargeAtk();
+                } else {
+                    console.log('you must construct additional pylons');
+                }
+            }
+        })
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 189) {
+                this.hp += 200;
+            }
+        })
+    }
+
+    setAim(e) {
+        let temp = this.canvas.getBoundingClientRect();
+        this.crosshair = [e.clientX - temp.x, e.clientY - temp.y];
     }
 
     draw() {
         this.ctx.beginPath();
         this.ctx.arc(this.pos[0], this.pos[1], this.radius, 2 * Math.PI, false);
-        // this.ctx.fillStyle = "#FFF";
         this.ctx.strokeStyle = "#FFF";
+        this.ctx.fillStyle = "#FF00FF";
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
+    }
+
+    chargeAtk() {
+        this.game.particles.forEach(el => {
+            if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+                el.alive = false;
+            }
+        })
+        this.charge -= 50;
+    }
+
+    update(dt) {
+        if (this.keyDown[87]) {
+            this.move(0, -(this.y_speed) * dt);
+        }
+        if (this.keyDown[83]) {
+            this.move(0, (this.y_speed) * dt);
+        }
+        if (this.keyDown[65]) {
+            this.move(-(this.x_speed) * dt, 0);
+        }
+        if (this.keyDown[68]) {
+            this.move((this.x_speed) * dt, 0);
+        }
+        if (this.charge < 100) {
+            this.charge += .02;
+        }
     }
 }
 

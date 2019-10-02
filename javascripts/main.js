@@ -13,12 +13,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        // ctx.fillStyle = "#222";
+        ctx.fillStyle = "#222222";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     const game = new Game(ctx, canvas);
+    document.body.style.cursor = "crosshair";
+
     window.game = game;
-    // game.player.draw();
-    // game.player.mountController();
     game.start();
     game.loop();
 })

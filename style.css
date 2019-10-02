@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background-color: #000;
     display: flex;
     justify-content: left;
     justify-content: center;
@@ -9,6 +9,9 @@ body {
     margin: 0;
     scroll-behavior: none;
 }
-#game {
-    /* border: 3px solid red; */
+canvas {
+    background-color: #222;
+    border: 3px solid red;
+    height: 99vh
+
 }
