@@ -132,6 +132,7 @@ class Player {
     }
 
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.pos[0], this.pos[1], this.radius, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#FFF";
@@ -139,7 +140,9 @@ class Player {
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "white";
         this.ctx.fill();
+        this.ctx.restore();
         this.ctx.closePath();
+        
     }
 
     chargeAtk() {

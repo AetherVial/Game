@@ -12,6 +12,7 @@ class Boss {
         this.alive = true;
         this.up = true;
         this.loaded = true;
+        this.loaded2 = true;
     }
 
     move(dt) {
@@ -31,6 +32,7 @@ class Boss {
             this.up = false;
         }
         this.move(dt);
+        this.fire2();
         this.fire();
     }
 
@@ -45,15 +47,36 @@ class Boss {
 
     fire() {
         if (this.loaded) {
-            let bullet = new EnemyParticle(game, [this.x, this.y], [-1, 0]);
+            let bullet = new EnemyParticle(game, 50, [this.x, this.y], [-1, 0]);
             this.game.add(bullet);
             this.loaded = false;
             setTimeout(() => {
                 this.loaded = true;
-            }, 500)
+            }, 2000)
         } else {
             return;
         }
+    }
+
+    fire2() {
+        if (this.loaded2) {
+            // setInterval(() => {
+            //     let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, 0]);
+            //     this.game.add(bullet);
+            // }, 1000)
+            // setTimeout(() => {
+            //     this.loaded = true;
+            // }, 500)
+            for (let i = 0; i < 90; i+=10) {
+                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, Math.cos(i)]);
+                this.game.add(bullet);
+            }
+            this.loaded2 = false;
+            setTimeout(() => {
+                this.loaded2 = true;
+            }, 500)
+        } 
+
     }
 
 
