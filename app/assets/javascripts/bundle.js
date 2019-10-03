@@ -328,6 +328,185 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
 
 /***/ }),
 
+/***/ "./javascripts/enemy3.js":
+/*!*******************************!*\
+  !*** ./javascripts/enemy3.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+/* harmony import */ var _enemy_exposion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enemy_exposion */ "./javascripts/enemy_exposion.js");
+
+
+
+
+class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor(game) {
+        super(game);
+        this.hp = 8000;
+        this.og_hp = 8000;
+        this.r = 100;
+        this.pos = [game.canvas.width-100, game.canvas.height / 2];
+        this.x = this.pos[0]
+        this.y = this.pos[1]
+        this.x_speed = .3;
+        this.y_speed = .3;
+        this.ctx = game.ctx;
+        this.game = game;
+        this.alive = true;
+
+        this.up = true;
+        this.down = false;
+        this.left = false;
+        this.right = false;
+    
+        this.loaded = true;
+        this.loaded2 = true;
+        this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2]
+    }
+
+    move(dt) {
+        if (this.up) {
+            this.y = this.y - this.y_speed * dt
+        } else if (this.down) {
+            this.y = this.y + this.y_speed * dt
+        } else if (this.left) {
+            this.x = this.x - this.x_speed * dt
+        } else if (this.right) {
+            this.x = this.x + this.x_speed * dt
+        }
+    }
+
+    dist(pos1, pos2) {
+        return Math.sqrt(
+            Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
+        );
+    }
+
+    fire() {
+        if (this.loaded) {
+            
+            let bullet = new _enemy_exposion__WEBPACK_IMPORTED_MODULE_2__["default"](this.game, 
+                                10, 
+                                [this.x, this.y], 
+                                [
+                                (this.game.canvas.width / 2 - this.x) / (this.dist(this.center, [this.x, this.y])), 
+                                
+                                (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
+                                ],
+                                10
+                                );
+
+            this.game.add(bullet)
+            bullet.explode();
+            this.loaded = false;
+
+            setTimeout(() => {
+                this.loaded = true;
+            }, 2000)
+        } else {
+            return;
+        }
+    }
+
+    update(dt) {
+        if (this.y >= (this.game.canvas.height - this.r) && this.x >= (this.game.canvas.width - this.r) ) {
+            this.up = true;
+            this.down = false;
+        } else if (this.y <= this.r && this.x >= 100) {
+            this.left = true;
+            this.up = false;
+        } else if (this.x <= 100 && this.y <= (this.game.canvas.height - this.r)) {
+            this.left = false;
+            this.down = true;
+        } else if (this.down) {
+            this.down = false;
+            this.right = true;
+        }
+        this.move(dt);
+        this.fire();
+        this.checkDead();
+    }
+    checkDead() {
+        if (this.hp <= 0) {
+            this.alive = false;
+            this.pos = [];
+            this.x = null;
+            this.y = null;
+            this.r = 0;
+            this.game.enemies.shift();
+            this.game.enemies.push(new Boss3(this.game));
+            this.game.player.dmg += 100;
+            setTimeout(() => {
+                this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
+            }, 10000)
+        }
+    }
+
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        this.ctx.strokeStyle = "#000";
+        this.ctx.fillStyle = "#000";
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Boss3);
+
+/***/ }),
+
+/***/ "./javascripts/enemy_exposion.js":
+/*!***************************************!*\
+  !*** ./javascripts/enemy_exposion.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+
+
+class enemyExlodingParticle extends _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor(game, r, pos, vel, dmg) {
+        super(game, r, pos, vel)
+        this.pos = pos.slice();
+        this.x = this.pos[0];
+        this.y = this.pos[1];
+        this.r = r;
+        this.ctx = game.ctx;
+        this.vel = vel;
+        this.damage = dmg;
+        this.alive = true;
+        this.game = game;
+    }
+
+    explode() {
+        setTimeout(() => {
+            for (let i = 45; i < 405; i += 10) {
+                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)], 10);
+                // setTimeout(() => {
+                this.game.add(bullet);
+                // }, 50);
+                this.alive = false;
+            }
+        }, 500)
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (enemyExlodingParticle);
+
+/***/ }),
+
 /***/ "./javascripts/enemy_particle.js":
 /*!***************************************!*\
   !*** ./javascripts/enemy_particle.js ***!
@@ -340,14 +519,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
 
 class EnemyParticle {
-    constructor(game, r, pos, vel) {
+    constructor(game, r, pos, vel, dmg = 50) {
         this.pos = pos.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
         this.r = r;
         this.ctx = game.ctx;
         this.vel = vel;
-        this.damage = 50;
+        this.damage = dmg;
         this.alive = true;
         this.game = game;
     }
@@ -401,6 +580,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _hud__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hud */ "./javascripts/hud.js");
 /* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
 /* harmony import */ var _enemy2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./enemy2 */ "./javascripts/enemy2.js");
+/* harmony import */ var _enemy3__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enemy3 */ "./javascripts/enemy3.js");
+
 
 
 
@@ -440,7 +621,8 @@ class Game {
         this.enemies.push(this.enemy1);
         this.enemy2 = new _enemy2__WEBPACK_IMPORTED_MODULE_5__["default"](this);
         this.enemies.push(this.enemy2);
-
+        this.enemy3= new _enemy3__WEBPACK_IMPORTED_MODULE_6__["default"](this);
+        this.enemies.push(this.enemy3)
 
         this.enemy = this.enemies[0];
         this.particles.push(this.player);
@@ -796,7 +978,9 @@ class Player {
         })
 
         document.addEventListener('click', (e) => {
-            this.fire(this.game, [this.x, this.y], this.crosshair);
+            if (this.alive) {
+                this.fire(this.game, [this.x, this.y], this.crosshair);
+            }
         })
 
         document.addEventListener('keydown', (e) => {
@@ -805,6 +989,7 @@ class Player {
                     this.chargeAtk();
                 } else {
                     console.log('you must construct additional pylons');
+                    console.log(this.game.enemy);
                 }
             }
         })

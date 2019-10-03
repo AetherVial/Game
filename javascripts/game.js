@@ -4,6 +4,7 @@ import EnemyParticle from './enemy_particle';
 import HUD from './hud';
 import Enemy from './enemy';
 import Enemy2 from './enemy2';
+import Enemy3 from './enemy3';
 
 class Game {
     constructor(ctx, canvas) {
@@ -37,7 +38,8 @@ class Game {
         this.enemies.push(this.enemy1);
         this.enemy2 = new Enemy2(this);
         this.enemies.push(this.enemy2);
-
+        this.enemy3= new Enemy3(this);
+        this.enemies.push(this.enemy3)
 
         this.enemy = this.enemies[0];
         this.particles.push(this.player);

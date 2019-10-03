@@ -1,13 +1,13 @@
 import Particle from './particle';
 class EnemyParticle {
-    constructor(game, r, pos, vel) {
+    constructor(game, r, pos, vel, dmg = 50) {
         this.pos = pos.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
         this.r = r;
         this.ctx = game.ctx;
         this.vel = vel;
-        this.damage = 50;
+        this.damage = dmg;
         this.alive = true;
         this.game = game;
     }

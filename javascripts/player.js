@@ -137,7 +137,9 @@ class Player {
         })
 
         document.addEventListener('click', (e) => {
-            this.fire(this.game, [this.x, this.y], this.crosshair);
+            if (this.alive) {
+                this.fire(this.game, [this.x, this.y], this.crosshair);
+            }
         })
 
         document.addEventListener('keydown', (e) => {
@@ -146,6 +148,7 @@ class Player {
                     this.chargeAtk();
                 } else {
                     console.log('you must construct additional pylons');
+                    console.log(this.game.enemy);
                 }
             }
         })
