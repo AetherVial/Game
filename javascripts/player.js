@@ -17,6 +17,8 @@ class Player {
         this.game = game;
         this.radius = 10;
         this.pos = [game.canvas.width / 2, game.canvas.height / 2];
+        this.x = this.pos[0];
+        this.y = this.pos[1];
         this.x_speed = .35;
         this.y_speed = .35;
         this.canvas = game.canvas;
@@ -35,19 +37,20 @@ class Player {
         this.invuln = false;
         this.charge = 0;
         this.alive = true;
+        this.powerUp1 = false;
     }
 
     move(x, y) {
-        this.pos[0] += x;
-        this.pos[1] += y;
-        if (this.pos[0] < 0 ) {
-            this.pos[0] = 0;
-        } else if (this.pos[1] < 0) {
-            this.pos[1] = 0;
-        } else if (this.pos[0] + this.radius > this.canvas.width) {
-            this.pos[0] = this.canvas.width - this.radius;
-        } else if (this.pos[1] + this.radius > this.canvas.height) {
-            this.pos[1] = this.canvas.height - this.radius;
+        this.x += x;
+        this.y += y;
+        if (this.x < 0 ) {
+            this.x = 0;
+        } else if (this.y < 0) {
+            this.y = 0;
+        } else if (this.x + this.radius > this.canvas.width) {
+            this.x = this.canvas.width - this.radius;
+        } else if (this.y + this.radius > this.canvas.height) {
+            this.y = this.canvas.height - this.radius;
         }
     }
 
@@ -69,14 +72,41 @@ class Player {
     }
 
     fire(game, pos, crosshair) {
-        let bullet = new Particle(game, pos, crosshair);
-        this.game.add(bullet);
+        // if (this.powerUp1) {
+        //     for (let i = 0; i < 3; i++) {
+        //         let bullet = new Particle(game, pos, crosshair, [Math.cos[i * 45], Math.sin[i * 30]]);
+        //         console.log('hi i powered up')
+        //         this.game.add(bullet);
+        //     }
+        // }
+        if (this.powerUp1) {
+            if (Math.abs(crosshair[0] - pos[0]) < 100) {
+                let bullet = new Particle(game, pos, crosshair);
+                this.game.add(bullet);
+                let bullet2 = new Particle(game, pos, [crosshair[0] + 30, crosshair[1]]);
+                this.game.add(bullet2);
+                let bullet3 = new Particle(game, pos, [Math.abs(30 - crosshair[0]), crosshair[1]]);
+                this.game.add(bullet3); 
+            } else {
+            let bullet = new Particle(game, pos, crosshair);
+                this.game.add(bullet);
+            let bullet2 = new Particle(game, pos, [crosshair[0], crosshair[1] + 30]);
+                this.game.add(bullet2);
+                let bullet3 = new Particle(game, pos, [crosshair[0], Math.abs(30 - crosshair[1])]);
+                this.game.add(bullet3);   
+            } 
+        } else {
+            let bullet = new Particle(game, pos, crosshair);
+            this.game.add(bullet);
+        }
     }
 
     checkDead() {
         if (this.hp <= 0) {
             this.alive = false;
             this.pos = [];
+            this.x = null;
+            this.y = null;
         }
     }
 
@@ -106,7 +136,7 @@ class Player {
         })
 
         document.addEventListener('click', (e) => {
-            this.fire(this.game, this.pos, this.crosshair);
+            this.fire(this.game, [this.x, this.y], this.crosshair);
         })
 
         document.addEventListener('keydown', (e) => {
@@ -134,7 +164,7 @@ class Player {
     draw() {
         this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.arc(this.pos[0], this.pos[1], this.radius, 2 * Math.PI, false);
+        this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#FFF";
         this.ctx.fillStyle = "#FF00FF";
         this.ctx.shadowBlur = 5;

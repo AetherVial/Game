@@ -3,16 +3,25 @@ import Player from './player';
 // import Enemy from './enemy';
 
 class Particle {
-    constructor(game, pos, crosshair) {
+    constructor(game, pos, crosshair, speed = 1) {
         this.pos = pos.slice();
-        this.crosshair = crosshair;
+        this.crosshair = crosshair.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
         this.r = 3;
         this.ctx = game.ctx;
-        this.vel = [1,1];
         this.damage = 100;
         this.alive = true;
+        this.game = game;
+        this.length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)));
+
+        this.velDir = [((this.crosshair[0] - this.pos[0]) / this.length), ((this.crosshair[1] - this.pos[1]) / this.length)];
+
+        // this.angle = Math.atan(this.velDir[0] / this.velDir[1]) + offset;
+        // this.velDir = [Math.sin(this.angle), Math.cos(this.angle)];
+
+        this.vel = [this.velDir[0] * speed, this.velDir[1] * speed];
+        // this.offset = offset;
     }
 
     dist(pos1, pos2) {
@@ -40,9 +49,11 @@ class Particle {
     }
 
     update(dt) {
-        let length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)))
-        this.x = this.x + ((this.crosshair[0] - this.pos[0]) / length) * dt * this.vel[0];
-        this.y = this.y + ((this.crosshair[1] - this.pos[1]) / length) * dt * this.vel[1];
+        // let length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)))
+        // this.x = this.x + ((this.crosshair[0] - this.pos[0]) / length) * dt
+        // this.y = this.y + ((this.crosshair[1] - this.pos[1]) / length) * dt
+        this.x = this.x + this.vel[0] * dt;
+        this.y = this.y + this.vel[1] * dt;
     }
 
 

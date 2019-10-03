@@ -33,13 +33,13 @@ class Game {
         this.player = new Player(this);
         this.player.mountController();
         this.hud = new HUD(this);
-        
-        this.enemy = new Enemy(this);
-        this.enemies.push(this.enemy);
+        this.enemy1 = new Enemy(this)
+        // this.enemy = new Enemy(this);
+        this.enemies.push(this.enemy1);
         this.enemy2 = new Enemy2(this);
         // this.enemy = new Enemy2(this);
         this.enemies.push(this.enemy2);
-
+        this.enemy = this.enemies[0];
         this.particles.push(this.player);
         console.log(this.enemy)
         this.particles.push(this.enemies[0]);

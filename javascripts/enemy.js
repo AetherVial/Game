@@ -1,4 +1,5 @@
 import EnemyParticle from './enemy_particle';
+import Particle from './particle';
 class Boss {
     constructor(game) {
         this.hp = 1000;
@@ -45,8 +46,8 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.player.hp += 100;
             setTimeout(() => {
-                console.log(this.game.enemies);
                 this.game.particles.push(this.game.enemies[0]);
                 this.game.enemy = this.game.enemies[0];
             }, 10000)

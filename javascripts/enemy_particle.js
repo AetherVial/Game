@@ -19,9 +19,11 @@ class EnemyParticle {
     }
 
     enemyCollidesWith() {
-        if (this.dist([this.x, this.y], [this.game.player.pos[0], this.game.player.pos[1]]) < (this.r + this.game.player.radius)) {
+        if (this.dist([this.x, this.y], [this.game.player.x, this.game.player.y]) < (this.r + this.game.player.radius)) {
             this.alive = false;
-            this.game.player.hp -= 50;
+            if (!this.game.player.invuln) {
+                this.game.player.hp -= 50;
+            }
         }
     }
 

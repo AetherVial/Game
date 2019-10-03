@@ -96,6 +96,8 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+/* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
+
 
 class Boss {
     constructor(game) {
@@ -143,8 +145,8 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.player.hp += 100;
             setTimeout(() => {
-                console.log(this.game.enemies);
                 this.game.particles.push(this.game.enemies[0]);
                 this.game.enemy = this.game.enemies[0];
             }, 10000)
@@ -218,8 +220,8 @@ __webpack_require__.r(__webpack_exports__);
 class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
     constructor(game) {
         super(game);
-        this.hp = 4000;
-        this.og_hp = 4000;
+        this.hp = 2500;
+        this.og_hp = 2500;
         this.r = 100;
         this.pos = [game.canvas.width / 4, game.canvas.height / 4];
         this.x = this.pos[0]
@@ -233,14 +235,13 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
         this.loaded2 = true;
     }
 
-    // move(dt) {
-    //     if (this.up) {
-    //         this.y = this.y - this.y_speed * dt
-    //     } else {
-    //         this.y = this.y + this.y_speed * dt
-    //     }
-    // }
-
+    move(dt) {
+        if (this.up) {
+            this.y = this.y - this.y_speed * dt
+        } else {
+            this.y = this.y + this.y_speed * dt
+        }
+    }
 
     update(dt) {
         this.checkDead();
@@ -249,7 +250,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
         } else if (this.y <= this.r) {
             this.up = false;
         }
-        // this.move(dt);
+        this.move(dt);
         this.fire2();
         this.fire();
     }
@@ -262,22 +263,24 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.player.powerUp1 = true;
             // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
         }
     }
 
     fire() {
         if (this.loaded) {
-            for (let i = 5; i < 365; i += 10) {
+            for (let i = 45; i < 405; i += 10) {
                 let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
-                setTimeout(() => {
+                // setTimeout(() => {
                     this.game.add(bullet);
-                }, 200);
-                this.loaded = false;
-                setTimeout(() => {
-                    this.loaded = true;
-                }, 10000)
+                // }, 50);
+                
             }
+            this.loaded = false;
+            setTimeout(() => {
+                this.loaded = true;
+            }, 1500)
         } else {
             return;
         }
@@ -299,11 +302,9 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.loaded2 = false;
             setTimeout(() => {
                 this.loaded2 = true;
-            }, 1000)
+            }, 4000)
         }
-
     }
-
 
     draw() {
         this.ctx.beginPath();
@@ -352,9 +353,11 @@ class EnemyParticle {
     }
 
     enemyCollidesWith() {
-        if (this.dist([this.x, this.y], [this.game.player.pos[0], this.game.player.pos[1]]) < (this.r + this.game.player.radius)) {
+        if (this.dist([this.x, this.y], [this.game.player.x, this.game.player.y]) < (this.r + this.game.player.radius)) {
             this.alive = false;
-            this.game.player.hp -= 50;
+            if (!this.game.player.invuln) {
+                this.game.player.hp -= 50;
+            }
         }
     }
 
@@ -427,13 +430,13 @@ class Game {
         this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this);
         this.player.mountController();
         this.hud = new _hud__WEBPACK_IMPORTED_MODULE_3__["default"](this);
-        
-        this.enemy = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this);
-        this.enemies.push(this.enemy);
+        this.enemy1 = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this)
+        // this.enemy = new Enemy(this);
+        this.enemies.push(this.enemy1);
         this.enemy2 = new _enemy2__WEBPACK_IMPORTED_MODULE_5__["default"](this);
         // this.enemy = new Enemy2(this);
         this.enemies.push(this.enemy2);
-
+        this.enemy = this.enemies[0];
         this.particles.push(this.player);
         console.log(this.enemy)
         this.particles.push(this.enemies[0]);
@@ -570,16 +573,25 @@ __webpack_require__.r(__webpack_exports__);
 // import Enemy from './enemy';
 
 class Particle {
-    constructor(game, pos, crosshair) {
+    constructor(game, pos, crosshair, speed = 1) {
         this.pos = pos.slice();
-        this.crosshair = crosshair;
+        this.crosshair = crosshair.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
         this.r = 3;
         this.ctx = game.ctx;
-        this.vel = [1,1];
         this.damage = 100;
         this.alive = true;
+        this.game = game;
+        this.length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)));
+
+        this.velDir = [((this.crosshair[0] - this.pos[0]) / this.length), ((this.crosshair[1] - this.pos[1]) / this.length)];
+
+        // this.angle = Math.atan(this.velDir[0] / this.velDir[1]) + offset;
+        // this.velDir = [Math.sin(this.angle), Math.cos(this.angle)];
+
+        this.vel = [this.velDir[0] * speed, this.velDir[1] * speed];
+        // this.offset = offset;
     }
 
     dist(pos1, pos2) {
@@ -607,9 +619,11 @@ class Particle {
     }
 
     update(dt) {
-        let length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)))
-        this.x = this.x + ((this.crosshair[0] - this.pos[0]) / length) * dt * this.vel[0];
-        this.y = this.y + ((this.crosshair[1] - this.pos[1]) / length) * dt * this.vel[1];
+        // let length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)))
+        // this.x = this.x + ((this.crosshair[0] - this.pos[0]) / length) * dt
+        // this.y = this.y + ((this.crosshair[1] - this.pos[1]) / length) * dt
+        this.x = this.x + this.vel[0] * dt;
+        this.y = this.y + this.vel[1] * dt;
     }
 
 
@@ -658,6 +672,8 @@ class Player {
         this.game = game;
         this.radius = 10;
         this.pos = [game.canvas.width / 2, game.canvas.height / 2];
+        this.x = this.pos[0];
+        this.y = this.pos[1];
         this.x_speed = .35;
         this.y_speed = .35;
         this.canvas = game.canvas;
@@ -676,19 +692,20 @@ class Player {
         this.invuln = false;
         this.charge = 0;
         this.alive = true;
+        this.powerUp1 = false;
     }
 
     move(x, y) {
-        this.pos[0] += x;
-        this.pos[1] += y;
-        if (this.pos[0] < 0 ) {
-            this.pos[0] = 0;
-        } else if (this.pos[1] < 0) {
-            this.pos[1] = 0;
-        } else if (this.pos[0] + this.radius > this.canvas.width) {
-            this.pos[0] = this.canvas.width - this.radius;
-        } else if (this.pos[1] + this.radius > this.canvas.height) {
-            this.pos[1] = this.canvas.height - this.radius;
+        this.x += x;
+        this.y += y;
+        if (this.x < 0 ) {
+            this.x = 0;
+        } else if (this.y < 0) {
+            this.y = 0;
+        } else if (this.x + this.radius > this.canvas.width) {
+            this.x = this.canvas.width - this.radius;
+        } else if (this.y + this.radius > this.canvas.height) {
+            this.y = this.canvas.height - this.radius;
         }
     }
 
@@ -710,14 +727,41 @@ class Player {
     }
 
     fire(game, pos, crosshair) {
-        let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
-        this.game.add(bullet);
+        // if (this.powerUp1) {
+        //     for (let i = 0; i < 3; i++) {
+        //         let bullet = new Particle(game, pos, crosshair, [Math.cos[i * 45], Math.sin[i * 30]]);
+        //         console.log('hi i powered up')
+        //         this.game.add(bullet);
+        //     }
+        // }
+        if (this.powerUp1) {
+            if (Math.abs(crosshair[0] - pos[0]) < 100) {
+                let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+                this.game.add(bullet);
+                let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0] + 30, crosshair[1]]);
+                this.game.add(bullet2);
+                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [Math.abs(30 - crosshair[0]), crosshair[1]]);
+                this.game.add(bullet3); 
+            } else {
+            let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+                this.game.add(bullet);
+            let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], crosshair[1] + 30]);
+                this.game.add(bullet2);
+                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], Math.abs(30 - crosshair[1])]);
+                this.game.add(bullet3);   
+            } 
+        } else {
+            let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+            this.game.add(bullet);
+        }
     }
 
     checkDead() {
         if (this.hp <= 0) {
             this.alive = false;
             this.pos = [];
+            this.x = null;
+            this.y = null;
         }
     }
 
@@ -747,7 +791,7 @@ class Player {
         })
 
         document.addEventListener('click', (e) => {
-            this.fire(this.game, this.pos, this.crosshair);
+            this.fire(this.game, [this.x, this.y], this.crosshair);
         })
 
         document.addEventListener('keydown', (e) => {
@@ -775,7 +819,7 @@ class Player {
     draw() {
         this.ctx.save();
         this.ctx.beginPath();
-        this.ctx.arc(this.pos[0], this.pos[1], this.radius, 2 * Math.PI, false);
+        this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#FFF";
         this.ctx.fillStyle = "#FF00FF";
         this.ctx.shadowBlur = 5;

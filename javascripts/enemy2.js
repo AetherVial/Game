@@ -3,8 +3,8 @@ import Boss from './enemy';
 class Boss2 extends Boss{
     constructor(game) {
         super(game);
-        this.hp = 4000;
-        this.og_hp = 4000;
+        this.hp = 2500;
+        this.og_hp = 2500;
         this.r = 100;
         this.pos = [game.canvas.width / 4, game.canvas.height / 4];
         this.x = this.pos[0]
@@ -18,14 +18,13 @@ class Boss2 extends Boss{
         this.loaded2 = true;
     }
 
-    // move(dt) {
-    //     if (this.up) {
-    //         this.y = this.y - this.y_speed * dt
-    //     } else {
-    //         this.y = this.y + this.y_speed * dt
-    //     }
-    // }
-
+    move(dt) {
+        if (this.up) {
+            this.y = this.y - this.y_speed * dt
+        } else {
+            this.y = this.y + this.y_speed * dt
+        }
+    }
 
     update(dt) {
         this.checkDead();
@@ -34,7 +33,7 @@ class Boss2 extends Boss{
         } else if (this.y <= this.r) {
             this.up = false;
         }
-        // this.move(dt);
+        this.move(dt);
         this.fire2();
         this.fire();
     }
@@ -47,22 +46,24 @@ class Boss2 extends Boss{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.player.powerUp1 = true;
             // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
         }
     }
 
     fire() {
         if (this.loaded) {
-            for (let i = 5; i < 365; i += 10) {
+            for (let i = 45; i < 405; i += 10) {
                 let bullet = new EnemyParticle(game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
-                setTimeout(() => {
+                // setTimeout(() => {
                     this.game.add(bullet);
-                }, 200);
-                this.loaded = false;
-                setTimeout(() => {
-                    this.loaded = true;
-                }, 10000)
+                // }, 50);
+                
             }
+            this.loaded = false;
+            setTimeout(() => {
+                this.loaded = true;
+            }, 1500)
         } else {
             return;
         }
@@ -84,11 +85,9 @@ class Boss2 extends Boss{
             this.loaded2 = false;
             setTimeout(() => {
                 this.loaded2 = true;
-            }, 1000)
+            }, 4000)
         }
-
     }
-
 
     draw() {
         this.ctx.beginPath();

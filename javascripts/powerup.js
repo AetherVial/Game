@@ -5,7 +5,9 @@ class PowerUp {
         this.game = game;
     }
 
-    
+    // powerUp() {
+    //     this
+    // }
     
 }
 
