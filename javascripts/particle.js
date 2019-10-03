@@ -3,7 +3,7 @@ import Player from './player';
 // import Enemy from './enemy';
 
 class Particle {
-    constructor(game, pos, crosshair, speed = 1) {
+    constructor(game, pos, crosshair, speed = 1, dmg = 100) {
         this.pos = pos.slice();
         this.crosshair = crosshair.slice();
         this.x = this.pos[0];

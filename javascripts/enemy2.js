@@ -46,8 +46,13 @@ class Boss2 extends Boss{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.enemies.push(new Boss2(this.game));
             this.game.player.powerUp1 = true;
-            // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
+            setTimeout(() => {
+                this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
+                console.log(this.game.enemies);
+            }, 10000)
         }
     }
 

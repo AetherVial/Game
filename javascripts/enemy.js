@@ -46,10 +46,11 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.enemies.push(new Boss(this.game));
             this.game.player.hp += 100;
             setTimeout(() => {
-                this.game.particles.push(this.game.enemies[0]);
                 this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
             }, 10000)
         }   
     }

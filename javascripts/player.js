@@ -38,6 +38,7 @@ class Player {
         this.charge = 0;
         this.alive = true;
         this.powerUp1 = false;
+        this.dmg = 100;
     }
 
     move(x, y) {
@@ -81,22 +82,22 @@ class Player {
         // }
         if (this.powerUp1) {
             if (Math.abs(crosshair[0] - pos[0]) < 100) {
-                let bullet = new Particle(game, pos, crosshair);
+                let bullet = new Particle(game, pos, crosshair, 1, this.dmg);
                 this.game.add(bullet);
-                let bullet2 = new Particle(game, pos, [crosshair[0] + 30, crosshair[1]]);
+                let bullet2 = new Particle(game, pos, [crosshair[0] + 30, crosshair[1]], 1, this.dmg);
                 this.game.add(bullet2);
-                let bullet3 = new Particle(game, pos, [Math.abs(30 - crosshair[0]), crosshair[1]]);
+                let bullet3 = new Particle(game, pos, [Math.abs(30 - crosshair[0]), 1, crosshair[1]], this.dmg);
                 this.game.add(bullet3); 
             } else {
-            let bullet = new Particle(game, pos, crosshair);
+                let bullet = new Particle(game, pos, crosshair, 1, this.dmg);
                 this.game.add(bullet);
-            let bullet2 = new Particle(game, pos, [crosshair[0], crosshair[1] + 30]);
+                let bullet2 = new Particle(game, pos, [crosshair[0], crosshair[1] + 30], 1, this.dmg);
                 this.game.add(bullet2);
-                let bullet3 = new Particle(game, pos, [crosshair[0], Math.abs(30 - crosshair[1])]);
+                let bullet3 = new Particle(game, pos, [crosshair[0], Math.abs(30 - crosshair[1])], 1, this.dmg);
                 this.game.add(bullet3);   
             } 
         } else {
-            let bullet = new Particle(game, pos, crosshair);
+            let bullet = new Particle(game, pos, crosshair, 1, this.dmg);
             this.game.add(bullet);
         }
     }

@@ -145,10 +145,11 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.enemies.push(new Boss(this.game));
             this.game.player.hp += 100;
             setTimeout(() => {
-                this.game.particles.push(this.game.enemies[0]);
                 this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
             }, 10000)
         }   
     }
@@ -263,8 +264,13 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
+            this.game.enemies.push(new Boss2(this.game));
             this.game.player.powerUp1 = true;
-            // setTimeout(() => {this.game.particles.push(this.game.enemies[1])}, 10000)
+            setTimeout(() => {
+                this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
+                console.log(this.game.enemies);
+            }, 10000)
         }
     }
 
@@ -431,16 +437,14 @@ class Game {
         this.player.mountController();
         this.hud = new _hud__WEBPACK_IMPORTED_MODULE_3__["default"](this);
         this.enemy1 = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this)
-        // this.enemy = new Enemy(this);
         this.enemies.push(this.enemy1);
         this.enemy2 = new _enemy2__WEBPACK_IMPORTED_MODULE_5__["default"](this);
-        // this.enemy = new Enemy2(this);
         this.enemies.push(this.enemy2);
+
+
         this.enemy = this.enemies[0];
         this.particles.push(this.player);
-        console.log(this.enemy)
         this.particles.push(this.enemies[0]);
-        console.log(this.particles);
     }
 
     loop() {
@@ -573,7 +577,7 @@ __webpack_require__.r(__webpack_exports__);
 // import Enemy from './enemy';
 
 class Particle {
-    constructor(game, pos, crosshair, speed = 1) {
+    constructor(game, pos, crosshair, speed = 1, dmg = 100) {
         this.pos = pos.slice();
         this.crosshair = crosshair.slice();
         this.x = this.pos[0];
@@ -693,6 +697,7 @@ class Player {
         this.charge = 0;
         this.alive = true;
         this.powerUp1 = false;
+        this.dmg = 100;
     }
 
     move(x, y) {
@@ -736,22 +741,22 @@ class Player {
         // }
         if (this.powerUp1) {
             if (Math.abs(crosshair[0] - pos[0]) < 100) {
-                let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+                let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair, 1, this.dmg);
                 this.game.add(bullet);
-                let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0] + 30, crosshair[1]]);
+                let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0] + 30, crosshair[1]], 1, this.dmg);
                 this.game.add(bullet2);
-                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [Math.abs(30 - crosshair[0]), crosshair[1]]);
+                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [Math.abs(30 - crosshair[0]), 1, crosshair[1]], this.dmg);
                 this.game.add(bullet3); 
             } else {
-            let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+                let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair, 1, this.dmg);
                 this.game.add(bullet);
-            let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], crosshair[1] + 30]);
+                let bullet2 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], crosshair[1] + 30], 1, this.dmg);
                 this.game.add(bullet2);
-                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], Math.abs(30 - crosshair[1])]);
+                let bullet3 = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, [crosshair[0], Math.abs(30 - crosshair[1])], 1, this.dmg);
                 this.game.add(bullet3);   
             } 
         } else {
-            let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair);
+            let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair, 1, this.dmg);
             this.game.add(bullet);
         }
     }
