@@ -73,13 +73,6 @@ class Player {
     }
 
     fire(game, pos, crosshair) {
-        // if (this.powerUp1) {
-        //     for (let i = 0; i < 3; i++) {
-        //         let bullet = new Particle(game, pos, crosshair, [Math.cos[i * 45], Math.sin[i * 30]]);
-        //         console.log('hi i powered up')
-        //         this.game.add(bullet);
-        //     }
-        // }
         if (this.powerUp1) {
             if (Math.abs(crosshair[0] - pos[0]) < 100) {
                 let bullet = new Particle(game, pos, crosshair, 1, this.dmg);
@@ -153,25 +146,6 @@ class Player {
             }
           
         })
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 49) {
-        //         this.dash(this.x_speed, this.y_speed);
-        //     }
-        // })
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 187) {
-        //         this.charge = 100;
-        //     }
-        // })
-
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 189) {
-        //         this.hp += 200;
-        //     }
-        // })
     }
 
     setAim(e) {
@@ -188,9 +162,8 @@ class Player {
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "white";
         this.ctx.fill();
-        this.ctx.restore();
         this.ctx.closePath();
-        
+        this.ctx.restore();
     }
 
     chargeAtk() {

@@ -70,13 +70,6 @@ class Boss {
 
     fire2() {
         if (this.loaded2) {
-            // setInterval(() => {
-            //     let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, 0]);
-            //     this.game.add(bullet);
-            // }, 1000)
-            // setTimeout(() => {
-            //     this.loaded = true;
-            // }, 500)
             for (let i = 0; i < 90; i+=10) {
                 let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, Math.cos(i)]);
                 this.game.add(bullet);
@@ -95,8 +88,8 @@ class Boss {
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
         this.ctx.fillStyle = "#000";
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
+        // this.ctx.shadowBlur = 5;
+        // this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
     }

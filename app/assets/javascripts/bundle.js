@@ -169,13 +169,6 @@ class Boss {
 
     fire2() {
         if (this.loaded2) {
-            // setInterval(() => {
-            //     let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, 0]);
-            //     this.game.add(bullet);
-            // }, 1000)
-            // setTimeout(() => {
-            //     this.loaded = true;
-            // }, 500)
             for (let i = 0; i < 90; i+=10) {
                 let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [-1, Math.cos(i)]);
                 this.game.add(bullet);
@@ -194,8 +187,8 @@ class Boss {
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
         this.ctx.fillStyle = "#000";
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
+        // this.ctx.shadowBlur = 5;
+        // this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
     }
@@ -923,23 +916,29 @@ class HUD {
     }
 
     draw() {
+
         this.ctx.beginPath();
-        this.ctx.rect(10,10,game.player.hp * 2, 50);
+        // this.ctx.rect(10,10,game.player.hp * 2, 20);
         this.ctx.fillStyle = '#32a852';
-        this.ctx.fillRect(10, 10, game.player.hp * 2, 50);
+        this.ctx.fillRect(10, 10, game.player.hp * 2, 20);
         this.ctx.stroke();
 
+        this.ctx.fillStyle = 'yellow';
+        this.ctx.font = "15px Arial";
+        this.ctx.fillText(this.player.hp + " / 300", 20, 25);
+
         this.ctx.beginPath();
-        this.ctx.rect(10,70,game.player.charge * 3, 25);
+        // this.ctx.rect(10,30,game.player.charge * 3, 15);
         this.ctx.fillStyle = '#00ffee';
-        this.ctx.fillRect(10, 70, game.player.charge * 3, 25);
+        this.ctx.fillRect(10, 30, game.player.charge * 3, 15);
         this.ctx.stroke();
 
         this.ctx.beginPath();
-        this.ctx.rect(10, this.canvas.height - 60, ((this.canvas.width - 20) * (this.game.enemy.hp / this.game.enemy.og_hp)), 25);
+        // this.ctx.rect(10, this.canvas.height - 60, ((this.canvas.width - 20) * (this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.fillStyle = '#702413';
         this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.stroke();
+
     }
 }
 
@@ -1151,13 +1150,6 @@ class Player {
     }
 
     fire(game, pos, crosshair) {
-        // if (this.powerUp1) {
-        //     for (let i = 0; i < 3; i++) {
-        //         let bullet = new Particle(game, pos, crosshair, [Math.cos[i * 45], Math.sin[i * 30]]);
-        //         console.log('hi i powered up')
-        //         this.game.add(bullet);
-        //     }
-        // }
         if (this.powerUp1) {
             if (Math.abs(crosshair[0] - pos[0]) < 100) {
                 let bullet = new _particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, pos, crosshair, 1, this.dmg);
@@ -1231,25 +1223,6 @@ class Player {
             }
           
         })
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 49) {
-        //         this.dash(this.x_speed, this.y_speed);
-        //     }
-        // })
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 187) {
-        //         this.charge = 100;
-        //     }
-        // })
-
-
-        // document.addEventListener('keydown', (e) => {
-        //     if (e.keyCode === 189) {
-        //         this.hp += 200;
-        //     }
-        // })
     }
 
     setAim(e) {
@@ -1266,9 +1239,8 @@ class Player {
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "white";
         this.ctx.fill();
-        this.ctx.restore();
         this.ctx.closePath();
-        
+        this.ctx.restore();
     }
 
     chargeAtk() {
