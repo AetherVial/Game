@@ -121,7 +121,7 @@ class Boss3 extends Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss3(this.game, this.level));
+            this.game.enemies.push(new Boss3(this.game, this.game.level));
             this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];

@@ -46,7 +46,7 @@ class Boss2 extends Boss{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss2(this.game, this.level));
+            this.game.enemies.push(new Boss2(this.game, this.game.level));
 
             if (!this.game.player.powerUp1) {
                 this.game.player.powerUp1 = true;
@@ -80,13 +80,6 @@ class Boss2 extends Boss{
 
     fire2() {
         if (this.loaded2) {
-            // setInterval(() => {
-            //     let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, 0]);
-            //     this.game.add(bullet);
-            // }, 1000)
-            // setTimeout(() => {
-            //     this.loaded = true;
-            // }, 500)
             for (let i = 0; i < 360; i += 10) {
                 let bullet = new EnemyParticle(game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
                 this.game.add(bullet);

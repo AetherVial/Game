@@ -145,7 +145,7 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss(this.game, this.level));
+            this.game.enemies.push(new Boss(this.game, this.game.level));
             this.game.player.hp += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
@@ -264,7 +264,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss2(this.game, this.level));
+            this.game.enemies.push(new Boss2(this.game, this.game.level));
 
             if (!this.game.player.powerUp1) {
                 this.game.player.powerUp1 = true;
@@ -298,13 +298,6 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
 
     fire2() {
         if (this.loaded2) {
-            // setInterval(() => {
-            //     let bullet = new EnemyParticle(game, 10, [this.x, this.y], [-1, 0]);
-            //     this.game.add(bullet);
-            // }, 1000)
-            // setTimeout(() => {
-            //     this.loaded = true;
-            // }, 500)
             for (let i = 0; i < 360; i += 10) {
                 let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [Math.sin(i), Math.cos(i)]);
                 this.game.add(bullet);
@@ -467,7 +460,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss3(this.game, this.level));
+            this.game.enemies.push(new Boss3(this.game, this.game.level));
             this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
