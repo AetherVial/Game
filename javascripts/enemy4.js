@@ -144,8 +144,8 @@ class Boss4 extends Boss {
         }
         this.move(dt);
         this.fire();
-        // this.fire2();
-        // this.fire3();
+        this.fire2();
+        this.fire3();
         this.checkDead();
     }
     checkDead() {

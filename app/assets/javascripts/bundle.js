@@ -650,8 +650,8 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
         this.move(dt);
         this.fire();
-        // this.fire2();
-        // this.fire3();
+        this.fire2();
+        this.fire3();
         this.checkDead();
     }
     checkDead() {
