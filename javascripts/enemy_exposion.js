@@ -6,18 +6,18 @@ class enemyExlodingParticle extends EnemyParticle {
         this.pos = pos.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
-        this.r = r;
+        this.r = r * 3;
         this.ctx = game.ctx;
         this.vel = vel;
-        this.damage = dmg;
+        this.damage = dmg * 1.5;
         this.alive = true;
         this.game = game;
     }
 
     explode() {
         setTimeout(() => {
-            for (let i = 45; i < 405; i += 10) {
-                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)], 10);
+            for (let i = 0; i < 360; i += 20) {
+                let bullet = new EnemyParticle(game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)], 20);
                 // setTimeout(() => {
                 this.game.add(bullet);
                 // }, 50);

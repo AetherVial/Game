@@ -120,18 +120,6 @@ class Player {
             this.keyDown[e.keyCode] = false;
         })
 
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 49) {
-                this.dash(this.x_speed, this.y_speed);
-            }
-        })
-
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 187) {
-                this.charge = 100;
-            }
-        })
-
         document.addEventListener('mousemove', (e) => {
             this.setAim(e);
         })
@@ -143,21 +131,47 @@ class Player {
         })
 
         document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 69) {
-                if (this.charge >= 50) {
-                    this.chargeAtk();
-                } else {
-                    console.log('you must construct additional pylons');
-                    console.log(this.game.enemy);
-                }
+            switch (e.keyCode) {
+                case 69:
+                    if (this.charge >= 50) {
+                        this.chargeAtk();
+                    } else {
+                        console.log('you must construct additional pylons');
+                    }
+                    return;
+                case 81:
+                    this.dash(this.x_speed, this.y_speed);
+                    return;
+                case 187: 
+                    this.charge += 100;
+                    return;
+                case 189:
+                    this.hp += 200;
+                    return;
+                default:
+                    break;
             }
+          
         })
 
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 189) {
-                this.hp += 200;
-            }
-        })
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 49) {
+        //         this.dash(this.x_speed, this.y_speed);
+        //     }
+        // })
+
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 187) {
+        //         this.charge = 100;
+        //     }
+        // })
+
+
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 189) {
+        //         this.hp += 200;
+        //     }
+        // })
     }
 
     setAim(e) {

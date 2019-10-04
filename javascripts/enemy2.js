@@ -1,10 +1,10 @@
 import EnemyParticle from './enemy_particle';
 import Boss from './enemy';
 class Boss2 extends Boss{
-    constructor(game) {
-        super(game);
-        this.hp = 2500;
-        this.og_hp = 2500;
+    constructor(game, level) {
+        super(game, level);
+        this.hp = 2500 * level;
+        this.og_hp = 2500 * level;
         this.r = 100;
         this.pos = [game.canvas.width / 4, game.canvas.height / 4];
         this.x = this.pos[0]
@@ -46,8 +46,12 @@ class Boss2 extends Boss{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss2(this.game));
-            this.game.player.powerUp1 = true;
+            this.game.enemies.push(new Boss2(this.game, this.level));
+
+            if (!this.game.player.powerUp1) {
+                this.game.player.powerUp1 = true;
+            }   
+            
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);

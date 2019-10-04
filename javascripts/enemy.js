@@ -1,9 +1,9 @@
 import EnemyParticle from './enemy_particle';
 import Particle from './particle';
 class Boss {
-    constructor(game) {
-        this.hp = 1000;
-        this.og_hp = 1000;
+    constructor(game, level) {
+        this.hp = 1000 * level;
+        this.og_hp = 1000 * level;
         this.r = 200;
         this.pos = [game.canvas.width - 200, game.canvas.height];
         this.x = this.pos[0]
@@ -46,7 +46,7 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss(this.game));
+            this.game.enemies.push(new Boss(this.game, this.level));
             this.game.player.hp += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];

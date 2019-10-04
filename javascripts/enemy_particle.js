@@ -22,7 +22,11 @@ class EnemyParticle {
         if (this.dist([this.x, this.y], [this.game.player.x, this.game.player.y]) < (this.r + this.game.player.radius)) {
             this.alive = false;
             if (!this.game.player.invuln) {
-                this.game.player.hp -= 50;
+                if (this.game.player.hp - this.damage > 0) {
+                    this.game.player.hp -= this.damage;
+                } else {
+                    this.game.player.hp = 0;
+                }
             }
         }
     }

@@ -3,10 +3,10 @@ import EnemyParticle from './enemy_particle';
 import ExplodingEnemyParticle from './enemy_exposion';
 
 class Boss3 extends Boss {
-    constructor(game) {
-        super(game);
-        this.hp = 8000;
-        this.og_hp = 8000;
+    constructor(game, level) {
+        super(game, level);
+        this.hp = 8000 * level;
+        this.og_hp = 8000 * level;
         this.r = 100;
         this.pos = [game.canvas.width-100, game.canvas.height / 2];
         this.x = this.pos[0]
@@ -23,7 +23,7 @@ class Boss3 extends Boss {
         this.right = false;
     
         this.loaded = true;
-        this.loaded2 = true;
+        // this.loaded2 = true;
         this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2]
     }
 
@@ -56,7 +56,7 @@ class Boss3 extends Boss {
                                 
                                 (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
                                 ],
-                                10
+                                25
                                 );
 
             this.game.add(bullet)
@@ -65,11 +65,35 @@ class Boss3 extends Boss {
 
             setTimeout(() => {
                 this.loaded = true;
-            }, 2000)
+            }, 500)
         } else {
             return;
         }
     }
+
+    // fire2() {
+    //     if (this.loaded2) {
+    //         let bullet = new EnemyParticle(this.game,
+    //             10,
+    //             [this.x, this.y],
+    //             [
+    //                 (this.game.canvas.width / 2 - this.x) / (this.dist(this.center, [this.x, this.y])),
+
+    //                 (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
+    //             ],
+    //             10
+    //         );
+
+    //         this.game.add(bullet)
+    //         this.loaded2 = false;
+
+    //         setTimeout(() => {
+    //             this.loaded2 = true;
+    //         }, 250)
+    //     } else {
+    //         return;
+    //     }
+    // }
 
     update(dt) {
         if (this.y >= (this.game.canvas.height - this.r) && this.x >= (this.game.canvas.width - this.r) ) {
@@ -97,7 +121,7 @@ class Boss3 extends Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss3(this.game));
+            this.game.enemies.push(new Boss3(this.game, this.level));
             this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];

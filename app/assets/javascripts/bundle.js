@@ -100,9 +100,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Boss {
-    constructor(game) {
-        this.hp = 1000;
-        this.og_hp = 1000;
+    constructor(game, level) {
+        this.hp = 1000 * level;
+        this.og_hp = 1000 * level;
         this.r = 200;
         this.pos = [game.canvas.width - 200, game.canvas.height];
         this.x = this.pos[0]
@@ -145,7 +145,7 @@ class Boss {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss(this.game));
+            this.game.enemies.push(new Boss(this.game, this.level));
             this.game.player.hp += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
@@ -219,10 +219,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
-    constructor(game) {
-        super(game);
-        this.hp = 2500;
-        this.og_hp = 2500;
+    constructor(game, level) {
+        super(game, level);
+        this.hp = 2500 * level;
+        this.og_hp = 2500 * level;
         this.r = 100;
         this.pos = [game.canvas.width / 4, game.canvas.height / 4];
         this.x = this.pos[0]
@@ -264,8 +264,12 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss2(this.game));
-            this.game.player.powerUp1 = true;
+            this.game.enemies.push(new Boss2(this.game, this.level));
+
+            if (!this.game.player.powerUp1) {
+                this.game.player.powerUp1 = true;
+            }   
+            
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
@@ -345,10 +349,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
-    constructor(game) {
-        super(game);
-        this.hp = 8000;
-        this.og_hp = 8000;
+    constructor(game, level) {
+        super(game, level);
+        this.hp = 8000 * level;
+        this.og_hp = 8000 * level;
         this.r = 100;
         this.pos = [game.canvas.width-100, game.canvas.height / 2];
         this.x = this.pos[0]
@@ -365,7 +369,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.right = false;
     
         this.loaded = true;
-        this.loaded2 = true;
+        // this.loaded2 = true;
         this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2]
     }
 
@@ -398,7 +402,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
                                 
                                 (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
                                 ],
-                                10
+                                25
                                 );
 
             this.game.add(bullet)
@@ -407,11 +411,35 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
             setTimeout(() => {
                 this.loaded = true;
-            }, 2000)
+            }, 500)
         } else {
             return;
         }
     }
+
+    // fire2() {
+    //     if (this.loaded2) {
+    //         let bullet = new EnemyParticle(this.game,
+    //             10,
+    //             [this.x, this.y],
+    //             [
+    //                 (this.game.canvas.width / 2 - this.x) / (this.dist(this.center, [this.x, this.y])),
+
+    //                 (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
+    //             ],
+    //             10
+    //         );
+
+    //         this.game.add(bullet)
+    //         this.loaded2 = false;
+
+    //         setTimeout(() => {
+    //             this.loaded2 = true;
+    //         }, 250)
+    //     } else {
+    //         return;
+    //     }
+    // }
 
     update(dt) {
         if (this.y >= (this.game.canvas.height - this.r) && this.x >= (this.game.canvas.width - this.r) ) {
@@ -439,7 +467,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.y = null;
             this.r = 0;
             this.game.enemies.shift();
-            this.game.enemies.push(new Boss3(this.game));
+            this.game.enemies.push(new Boss3(this.game, this.level));
             this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
@@ -464,6 +492,202 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
 /***/ }),
 
+/***/ "./javascripts/enemy4.js":
+/*!*******************************!*\
+  !*** ./javascripts/enemy4.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
+/* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+/* harmony import */ var _enemy_exposion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enemy_exposion */ "./javascripts/enemy_exposion.js");
+
+
+
+
+class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
+    constructor(game, level) {
+        super(game);
+        this.hp = 9001 * level;
+        this.og_hp = 9001 * level;
+        this.r = 150;
+        this.pos = [game.canvas.width - 150, game.canvas.height -150];
+        this.x = this.pos[0]
+        this.y = this.pos[1]
+        this.x_speed = .3;
+        this.y_speed = .3;
+        this.ctx = game.ctx;
+        this.game = game;
+        this.alive = true;
+        this.level = level;
+        this.up = true;
+        this.down = false;
+        this.left = false;
+        this.right = false;
+
+        this.loaded = true;
+        this.loaded2 = true;
+        this.loaded3 = true;
+        this.aim = [this.game.player.x, this.game.player.y];
+        this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2];
+    }
+
+    move(dt) {
+        if (this.up) {
+            this.y = this.y - this.y_speed * dt
+        } else if (this.down) {
+            this.y = this.y + this.y_speed * dt
+        } else if (this.left) {
+            this.x = this.x - this.x_speed * dt
+        } else if (this.right) {
+            this.x = this.x + this.x_speed * dt
+        }
+    }
+
+    dist(pos1, pos2) {
+        return Math.sqrt(
+            Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
+        );
+    }
+
+    fire() {
+        if (this.loaded) {
+            let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"](
+                this.game,
+                10,
+                [this.x, this.y],
+                [
+                    (this.game.player.x - this.x) / (this.dist(this.aim, [this.x, this.y])) * 2,
+
+                    ((this.game.player.y - this.y) / (this.dist(this.aim, [this.x, this.y]))) * 2
+                ],
+                10 * this.level)
+            this.game.add(bullet);
+            this.loaded = false;
+            setTimeout(() => {
+                this.loaded = true;
+            }, 1000)
+            console.log(this.level);
+        }
+    }
+
+    // sleep = ms => new Promise(res => setTimeout(res, ms));
+
+    fire2() {
+        if (this.loaded2)  {
+            for (let i = 0; i <= 360; i += 20) {
+                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
+                this.game.add(bullet);
+                }
+            setTimeout(()=> {
+                for (let i = 15; i <= 375; i += 20) {
+                    let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
+                    this.game.add(bullet);
+                }
+            }, 100)
+            setTimeout(() => {
+                for (let i = 30; i <= 390; i += 20) {
+                    let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
+                    this.game.add(bullet);
+                }
+            }, 200)
+            setTimeout(() => {
+                for (let i = 45; i <= 405; i += 20) {
+                    let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_1__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)]);
+                    this.game.add(bullet);
+                }
+            }, 300)
+            this.loaded2 = false
+            setTimeout(() => {
+                this.loaded2 = true;
+            }, 2000)
+            }
+    }
+            
+    fire3() {
+        if (this.loaded3) {
+
+            let bullet = new _enemy_exposion__WEBPACK_IMPORTED_MODULE_2__["default"](this.game,
+                10,
+                [this.x, this.y],
+                [
+                    (this.game.canvas.width / 2 - this.x) / (this.dist(this.center, [this.x, this.y])),
+
+                    (this.game.canvas.height / 2 - this.y) / (this.dist(this.center, [this.x, this.y]))
+                ],
+                25
+            );
+
+            this.game.add(bullet)
+            bullet.explode();
+            this.loaded3 = false;
+
+            setTimeout(() => {
+                this.loaded3 = true;
+            }, 1500)
+        } else {
+            return;
+        }
+    }    
+
+
+    update(dt) {
+        if (this.y >= (this.game.canvas.height - this.r) && this.x >= (this.game.canvas.width - this.r)) {
+            this.up = true;
+            this.down = false;
+        } else if (this.y <= this.r && this.x >= 100) {
+            this.left = true;
+            this.up = false;
+        } else if (this.x <= 100 && this.y <= (this.game.canvas.height - this.r)) {
+            this.left = false;
+            this.down = true;
+        } else if (this.down) {
+            this.down = false;
+            this.right = true;
+        }
+        this.move(dt);
+        this.fire();
+        // this.fire2();
+        // this.fire3();
+        this.checkDead();
+    }
+    checkDead() {
+        if (this.hp <= 0) {
+            this.alive = false;
+            this.pos = [];
+            this.x = null;
+            this.y = null;
+            this.r = 0;
+            this.game.enemies.shift();
+            this.game.level = this.game.level + 1;
+            this.game.enemies.push(new Boss4(this.game, this.game.level));
+            this.game.player.dmg += 100;
+            setTimeout(() => {
+                this.game.enemy = this.game.enemies[0];
+                this.game.particles.push(this.game.enemy);
+            }, 10000)
+        }
+    }
+
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        this.ctx.strokeStyle = "#000";
+        this.ctx.fillStyle = "#000";
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Boss4);
+
+/***/ }),
+
 /***/ "./javascripts/enemy_exposion.js":
 /*!***************************************!*\
   !*** ./javascripts/enemy_exposion.js ***!
@@ -482,18 +706,18 @@ class enemyExlodingParticle extends _enemy_particle__WEBPACK_IMPORTED_MODULE_0__
         this.pos = pos.slice();
         this.x = this.pos[0];
         this.y = this.pos[1];
-        this.r = r;
+        this.r = r * 3;
         this.ctx = game.ctx;
         this.vel = vel;
-        this.damage = dmg;
+        this.damage = dmg * 1.5;
         this.alive = true;
         this.game = game;
     }
 
     explode() {
         setTimeout(() => {
-            for (let i = 45; i < 405; i += 10) {
-                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)], 10);
+            for (let i = 0; i < 360; i += 20) {
+                let bullet = new _enemy_particle__WEBPACK_IMPORTED_MODULE_0__["default"](game, 10, [this.x, this.y], [.5 * Math.sin(i), .5 * Math.cos(i)], 20);
                 // setTimeout(() => {
                 this.game.add(bullet);
                 // }, 50);
@@ -541,7 +765,11 @@ class EnemyParticle {
         if (this.dist([this.x, this.y], [this.game.player.x, this.game.player.y]) < (this.r + this.game.player.radius)) {
             this.alive = false;
             if (!this.game.player.invuln) {
-                this.game.player.hp -= 50;
+                if (this.game.player.hp - this.damage > 0) {
+                    this.game.player.hp -= this.damage;
+                } else {
+                    this.game.player.hp = 0;
+                }
             }
         }
     }
@@ -581,6 +809,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
 /* harmony import */ var _enemy2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./enemy2 */ "./javascripts/enemy2.js");
 /* harmony import */ var _enemy3__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enemy3 */ "./javascripts/enemy3.js");
+/* harmony import */ var _enemy4__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./enemy4 */ "./javascripts/enemy4.js");
+
 
 
 
@@ -598,6 +828,8 @@ class Game {
         this.prevTime = Date.now();
         this.particles = [];
         this.enemies = [];
+        this.level = 1;
+        this.paused = false;
     }
 
     add(object) {
@@ -617,39 +849,57 @@ class Game {
         this.player = new _player__WEBPACK_IMPORTED_MODULE_0__["default"](this);
         this.player.mountController();
         this.hud = new _hud__WEBPACK_IMPORTED_MODULE_3__["default"](this);
-        this.enemy1 = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this)
+        this.enemy1 = new _enemy__WEBPACK_IMPORTED_MODULE_4__["default"](this, this.level)
         this.enemies.push(this.enemy1);
-        this.enemy2 = new _enemy2__WEBPACK_IMPORTED_MODULE_5__["default"](this);
+        this.enemy2 = new _enemy2__WEBPACK_IMPORTED_MODULE_5__["default"](this, this.level);
         this.enemies.push(this.enemy2);
-        this.enemy3= new _enemy3__WEBPACK_IMPORTED_MODULE_6__["default"](this);
+        this.enemy3= new _enemy3__WEBPACK_IMPORTED_MODULE_6__["default"](this, this.level);
         this.enemies.push(this.enemy3)
+        this.enemy4 = new _enemy4__WEBPACK_IMPORTED_MODULE_7__["default"](this, this.level);
+        this.enemies.push(this.enemy4)
 
         this.enemy = this.enemies[0];
         this.particles.push(this.player);
         this.particles.push(this.enemies[0]);
+        this.paused = false;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 80) {
+                if (!this.paused) {
+                    console.log('trying to pause')
+                    this.paused = true;
+                } else if (this.paused) {
+                    console.log('trying to unpause')
+                    this.paused = false;
+                }
+           }
+           
+        })
     }
 
     loop() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.particles = this.particles.filter(el => {
-            if (el.alive) return el;
-        })
-        this.particles.forEach(el => {
-            if (el.alive) {
-                el.draw();
-                el.update(this.dt);
-                if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
-                    this.checkBounds(el);
-                    el.collidesWith();
+        if (!this.paused) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.particles = this.particles.filter(el => {
+                if (el.alive) return el;
+            })
+            this.particles.forEach(el => {
+                if (el.alive) {
+                    el.draw();
+                    el.update(this.dt);
+                    if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+                        this.checkBounds(el);
+                        el.collidesWith();
+                    }
+                    if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+                        this.checkBounds(el);
+                        el.enemyCollidesWith();
+                    }
                 }
-                if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
-                    this.checkBounds(el);
-                    el.enemyCollidesWith();
-                }
-            }
-        })
-        this.hud.draw();
-        this.dt = Date.now() - this.prevTime;
+            })
+            this.hud.draw();
+            this.dt = Date.now() - this.prevTime;
+        }
         this.prevTime = Date.now();
         window.requestAnimationFrame(this.loop);
     }
@@ -766,18 +1016,12 @@ class Particle {
         this.y = this.pos[1];
         this.r = 3;
         this.ctx = game.ctx;
-        this.damage = 100;
+        this.damage = dmg;
         this.alive = true;
         this.game = game;
         this.length = (Math.sqrt((Math.pow(this.crosshair[1] - this.pos[1], 2)) + Math.pow(this.crosshair[0] - this.pos[0], 2)));
-
         this.velDir = [((this.crosshair[0] - this.pos[0]) / this.length), ((this.crosshair[1] - this.pos[1]) / this.length)];
-
-        // this.angle = Math.atan(this.velDir[0] / this.velDir[1]) + offset;
-        // this.velDir = [Math.sin(this.angle), Math.cos(this.angle)];
-
         this.vel = [this.velDir[0] * speed, this.velDir[1] * speed];
-        // this.offset = offset;
     }
 
     dist(pos1, pos2) {
@@ -961,18 +1205,6 @@ class Player {
             this.keyDown[e.keyCode] = false;
         })
 
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 49) {
-                this.dash(this.x_speed, this.y_speed);
-            }
-        })
-
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 187) {
-                this.charge = 100;
-            }
-        })
-
         document.addEventListener('mousemove', (e) => {
             this.setAim(e);
         })
@@ -984,21 +1216,47 @@ class Player {
         })
 
         document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 69) {
-                if (this.charge >= 50) {
-                    this.chargeAtk();
-                } else {
-                    console.log('you must construct additional pylons');
-                    console.log(this.game.enemy);
-                }
+            switch (e.keyCode) {
+                case 69:
+                    if (this.charge >= 50) {
+                        this.chargeAtk();
+                    } else {
+                        console.log('you must construct additional pylons');
+                    }
+                    return;
+                case 81:
+                    this.dash(this.x_speed, this.y_speed);
+                    return;
+                case 187: 
+                    this.charge += 100;
+                    return;
+                case 189:
+                    this.hp += 200;
+                    return;
+                default:
+                    break;
             }
+          
         })
 
-        document.addEventListener('keydown', (e) => {
-            if (e.keyCode === 189) {
-                this.hp += 200;
-            }
-        })
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 49) {
+        //         this.dash(this.x_speed, this.y_speed);
+        //     }
+        // })
+
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 187) {
+        //         this.charge = 100;
+        //     }
+        // })
+
+
+        // document.addEventListener('keydown', (e) => {
+        //     if (e.keyCode === 189) {
+        //         this.hp += 200;
+        //     }
+        // })
     }
 
     setAim(e) {
