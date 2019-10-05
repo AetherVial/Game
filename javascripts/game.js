@@ -54,10 +54,8 @@ class Game {
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
                 if (!this.paused) {
-                    console.log('trying to pause')
                     this.paused = true;
                 } else if (this.paused) {
-                    console.log('trying to unpause')
                     this.paused = false;
                 }
            }
@@ -66,8 +64,12 @@ class Game {
     }
 
     loop() {
+        const bg = new Image();
+        bg.src = "../app/assets/floor.png";
+
         if (!this.paused) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
             this.particles = this.particles.filter(el => {
                 if (el.alive) return el;
             })

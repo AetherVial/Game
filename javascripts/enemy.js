@@ -4,8 +4,8 @@ class Boss {
     constructor(game, level) {
         this.hp = 1000 * level;
         this.og_hp = 1000 * level;
-        this.r = 200;
-        this.pos = [game.canvas.width - 200, game.canvas.height];
+        this.r = 150;
+        this.pos = [game.canvas.width - 150, game.canvas.height];
         this.x = this.pos[0]
         this.y = this.pos[1]
         this.y_speed = .3;
@@ -77,21 +77,30 @@ class Boss {
             this.loaded2 = false;
             setTimeout(() => {
                 this.loaded2 = true;
-            }, 500)
+            }, 1500)
         } 
 
     }
 
 
+
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
-        this.ctx.fillStyle = "#000";
-        // this.ctx.shadowBlur = 5;
-        // this.ctx.shadowColor = "white";
+
+        this.ctx.shadowColor = 'white';
+        this.ctx.shadowBlur = 30;
+
+        this.ctx.strokeStyle = "#FF0000";
+        this.ctx.lineWidth = 5;
+        this.ctx.fillStyle = "rgba(0,0,0,0)";
+        // this.ctx.shadowColor = "#FF0000";
+
+        this.ctx.stroke();
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 

@@ -29,14 +29,14 @@ class Particle {
             this.alive = false;
 
             if (game.player.charge < 90) {
-                (game.player.charge += 10);
+                (game.player.charge += 5);
             } else {
                 game.player.charge = 100;
             }
 
-            if (game.enemy.hp > 0) {
+            if (game.enemy.hp - this.damage > 0) {
                 game.enemy.hp -= this.damage;
-            } else if (game.enemy.hp - this.damage < 0){
+            } else if (game.enemy.hp - this.damage <= 0){
                 game.enemy.hp = 0;
             }
         }

@@ -68,8 +68,6 @@ class Boss4 extends Boss {
         }
     }
 
-    // sleep = ms => new Promise(res => setTimeout(res, ms));
-
     fire2() {
         if (this.loaded2)  {
             for (let i = 0; i <= 360; i += 20) {

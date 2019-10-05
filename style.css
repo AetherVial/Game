@@ -10,8 +10,7 @@ body {
     scroll-behavior: none;
 }
 canvas {
-    background-color: #222;
-    /* border: 3px solid red; */
-    height: 99vh
-
+    background-image: url('./app/assets/floor.png');
+    height: 99vh;
+    /* color: red; */
 }

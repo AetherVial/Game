@@ -103,8 +103,8 @@ class Boss {
     constructor(game, level) {
         this.hp = 1000 * level;
         this.og_hp = 1000 * level;
-        this.r = 200;
-        this.pos = [game.canvas.width - 200, game.canvas.height];
+        this.r = 150;
+        this.pos = [game.canvas.width - 150, game.canvas.height];
         this.x = this.pos[0]
         this.y = this.pos[1]
         this.y_speed = .3;
@@ -176,21 +176,30 @@ class Boss {
             this.loaded2 = false;
             setTimeout(() => {
                 this.loaded2 = true;
-            }, 500)
+            }, 1500)
         } 
 
     }
 
 
+
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
-        this.ctx.fillStyle = "#000";
-        // this.ctx.shadowBlur = 5;
-        // this.ctx.shadowColor = "white";
+
+        this.ctx.shadowColor = 'white';
+        this.ctx.shadowBlur = 30;
+
+        this.ctx.strokeStyle = "#FF0000";
+        this.ctx.lineWidth = 5;
+        this.ctx.fillStyle = "rgba(0,0,0,0)";
+        // this.ctx.shadowColor = "#FF0000";
+
+        this.ctx.stroke();
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
@@ -560,8 +569,6 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
     }
 
-    // sleep = ms => new Promise(res => setTimeout(res, ms));
-
     fire2() {
         if (this.loaded2)  {
             for (let i = 0; i <= 360; i += 20) {
@@ -852,10 +859,8 @@ class Game {
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
                 if (!this.paused) {
-                    console.log('trying to pause')
                     this.paused = true;
                 } else if (this.paused) {
-                    console.log('trying to unpause')
                     this.paused = false;
                 }
            }
@@ -864,8 +869,12 @@ class Game {
     }
 
     loop() {
+        const bg = new Image();
+        bg.src = "../app/assets/floor.png";
+
         if (!this.paused) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
             this.particles = this.particles.filter(el => {
                 if (el.alive) return el;
             })
@@ -916,7 +925,7 @@ class HUD {
     }
 
     draw() {
-
+        this.ctx.save();
         this.ctx.beginPath();
         // this.ctx.rect(10,10,game.player.hp * 2, 20);
         this.ctx.fillStyle = '#32a852';
@@ -938,7 +947,7 @@ class HUD {
         this.ctx.fillStyle = '#702413';
         this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.stroke();
-
+        this.ctx.restore();
     }
 }
 
@@ -971,13 +980,14 @@ window.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        ctx.fillStyle = "#222222";
+        // ctx.fillStyle = "#222222";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     const game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas);
     document.body.style.cursor = "crosshair";
-
     window.game = game;
     game.start();
+    // alert('wow')
     game.loop();
 })
 
@@ -1027,14 +1037,14 @@ class Particle {
             this.alive = false;
 
             if (game.player.charge < 90) {
-                (game.player.charge += 10);
+                (game.player.charge += 5);
             } else {
                 game.player.charge = 100;
             }
 
-            if (game.enemy.hp > 0) {
+            if (game.enemy.hp - this.damage > 0) {
                 game.enemy.hp -= this.damage;
-            } else if (game.enemy.hp - this.damage < 0){
+            } else if (game.enemy.hp - this.damage <= 0){
                 game.enemy.hp = 0;
             }
         }
@@ -1233,11 +1243,16 @@ class Player {
     draw() {
         this.ctx.save();
         this.ctx.beginPath();
+
         this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#FFF";
-        this.ctx.fillStyle = "#FF00FF";
+
+        this.ctx.strokeStyle = "#00f7ff";
+        this.ctx.lineWidth = 5;
+        this.ctx.fillStyle = "#00f7ff";
+
         this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
+        this.ctx.shadowColor = "#00f7ff";
+
         this.ctx.fill();
         this.ctx.closePath();
         this.ctx.restore();

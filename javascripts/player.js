@@ -156,11 +156,16 @@ class Player {
     draw() {
         this.ctx.save();
         this.ctx.beginPath();
+
         this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#FFF";
-        this.ctx.fillStyle = "#FF00FF";
+
+        this.ctx.strokeStyle = "#00f7ff";
+        this.ctx.lineWidth = 5;
+        this.ctx.fillStyle = "#00f7ff";
+
         this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
+        this.ctx.shadowColor = "#00f7ff";
+
         this.ctx.fill();
         this.ctx.closePath();
         this.ctx.restore();

@@ -9,7 +9,7 @@ class HUD {
     }
 
     draw() {
-
+        this.ctx.save();
         this.ctx.beginPath();
         // this.ctx.rect(10,10,game.player.hp * 2, 20);
         this.ctx.fillStyle = '#32a852';
@@ -31,7 +31,7 @@ class HUD {
         this.ctx.fillStyle = '#702413';
         this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
         this.ctx.stroke();
-
+        this.ctx.restore();
     }
 }
 
