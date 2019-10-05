@@ -11,6 +11,8 @@ body {
 }
 canvas {
     background-image: url('./app/assets/floor.png');
-    height: 99vh;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
     /* color: red; */
 }

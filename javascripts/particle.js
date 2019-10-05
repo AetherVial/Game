@@ -34,9 +34,9 @@ class Particle {
                 game.player.charge = 100;
             }
 
-            if (game.enemy.hp - this.damage > 0) {
-                game.enemy.hp -= this.damage;
-            } else if (game.enemy.hp - this.damage <= 0){
+            if (this.game.enemy.hp - this.damage > 0) {
+                this.game.enemy.hp -= this.damage;
+            } else if (this.game.enemy.hp - this.damage <= 0){
                 game.enemy.hp = 0;
             }
         }

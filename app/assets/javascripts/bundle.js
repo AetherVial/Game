@@ -987,7 +987,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.style.cursor = "crosshair";
     window.game = game;
     game.start();
-    // alert('wow')
+    // alert('wow');
     game.loop();
 })
 
@@ -1042,9 +1042,9 @@ class Particle {
                 game.player.charge = 100;
             }
 
-            if (game.enemy.hp - this.damage > 0) {
-                game.enemy.hp -= this.damage;
-            } else if (game.enemy.hp - this.damage <= 0){
+            if (this.game.enemy.hp - this.damage > 0) {
+                this.game.enemy.hp -= this.damage;
+            } else if (this.game.enemy.hp - this.damage <= 0){
                 game.enemy.hp = 0;
             }
         }

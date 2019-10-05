@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.style.cursor = "crosshair";
     window.game = game;
     game.start();
-    // alert('wow')
+    // alert('wow');
     game.loop();
 })
 
