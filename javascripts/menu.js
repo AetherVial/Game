@@ -9,8 +9,10 @@ class Menu {
         this.canvas = canvas;
         this.bg = new Image();
         this.bg.src = `${PATH}/app/floor.png`;
-        this.bgm = new Audio();
-        this.bgm.src = `${PATH}/app/EnterTheGun.mp3`;
+        this.img = new Image();
+        this.img.src = `${PATH}/app/logo.png`;
+        // this.bgm = new Audio();
+        // this.bgm.src = `${PATH}/app/EnterTheGun.mp3`;
     }
 
     gameStart(e) {
@@ -27,8 +29,6 @@ class Menu {
     draw() {
         
         this.ctx.save();
-        const img = new Image();
-        img.src = `${PATH}/app/logo.png`;
 
         // this.bgm.load();
         // this.bgm.play();
@@ -38,10 +38,10 @@ class Menu {
         // this.ctx.fillStyle = '#222222';
         // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.bg, 0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2,
-                                this.canvas.height / 2 - img.height,
-                                img.width, 
-                                img.height);
+        this.ctx.drawImage(this.img, this.canvas.width / 2 - this.img.width / 2,
+                                this.canvas.height / 2 - this.img.height,
+                                this.img.width, 
+                                this.img.height);
             
         // this.ctx.beginPath();
         // this.ctx.fillStyle = '#32a852';

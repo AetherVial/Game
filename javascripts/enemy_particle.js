@@ -38,11 +38,13 @@ class EnemyParticle {
 
 
     draw() {
+        this.ctx.save()
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
         this.ctx.fillStyle = "red";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 

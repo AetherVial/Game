@@ -138,14 +138,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
 
 
+
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss {
     constructor(game, level) {
         this.hp = 1000 * level;
         this.og_hp = 1000 * level;
-        this.r = 150;
-        this.pos = [game.canvas.width - 150, game.canvas.height];
-        this.x = this.pos[0]
-        this.y = this.pos[1]
+        this.r = 75;
+        this.pos = [game.canvas.width - 150, game.canvas.height - 150];
+        this.x = this.pos[0];
+        this.y = this.pos[1];
         this.y_speed = .3;
         this.ctx = game.ctx;
         this.game = game;
@@ -153,6 +155,12 @@ class Boss {
         this.up = true;
         this.loaded = true;
         this.loaded2 = true;
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/wizard.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -164,16 +172,32 @@ class Boss {
     }
 
 
+
     update(dt) {
         this.checkDead();
-        if (this.y >= this.game.canvas.height - this.r) {
+        if (this.y >= this.game.canvas.height - 150) {
             this.up = true;
-        } else if (this.y <= this.r) {
+        } else if (this.y <= 150) {
             this.up = false;
+        }
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 80;
+                if (this.coords_x === 720) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 80;
+                if (this.coords_x === 80) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
         }
         this.move(dt);
         this.fire2();
         this.fire();
+        this.frames = this.frames + 1;
     }
 
     checkDead() {
@@ -224,16 +248,18 @@ class Boss {
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
 
-        this.ctx.shadowColor = 'white';
-        this.ctx.shadowBlur = 30;
+        // this.ctx.shadowColor = 'white';
+        // this.ctx.shadowBlur = 30;
 
-        this.ctx.strokeStyle = "#FF0000";
-        this.ctx.lineWidth = 5;
-        this.ctx.fillStyle = "rgba(0,0,0,0)";
+        // this.ctx.strokeStyle = "#FF0000";
+        // this.ctx.lineWidth = 5;
+        // this.ctx.fillStyle = "rgba(0,0,0,0)";
         // this.ctx.shadowColor = "#FF0000";
+
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
 
         this.ctx.stroke();
         this.ctx.fill();
@@ -813,11 +839,13 @@ class EnemyParticle {
 
 
     draw() {
+        this.ctx.save()
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
         this.ctx.fillStyle = "red";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
@@ -1068,8 +1096,10 @@ class Menu {
         this.canvas = canvas;
         this.bg = new Image();
         this.bg.src = `${PATH}/app/floor.png`;
-        this.bgm = new Audio();
-        this.bgm.src = `${PATH}/app/EnterTheGun.mp3`;
+        this.img = new Image();
+        this.img.src = `${PATH}/app/logo.png`;
+        // this.bgm = new Audio();
+        // this.bgm.src = `${PATH}/app/EnterTheGun.mp3`;
     }
 
     gameStart(e) {
@@ -1086,8 +1116,6 @@ class Menu {
     draw() {
         
         this.ctx.save();
-        const img = new Image();
-        img.src = `${PATH}/app/logo.png`;
 
         // this.bgm.load();
         // this.bgm.play();
@@ -1097,10 +1125,10 @@ class Menu {
         // this.ctx.fillStyle = '#222222';
         // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.bg, 0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2,
-                                this.canvas.height / 2 - img.height,
-                                img.width, 
-                                img.height);
+        this.ctx.drawImage(this.img, this.canvas.width / 2 - this.img.width / 2,
+                                this.canvas.height / 2 - this.img.height,
+                                this.img.width, 
+                                this.img.height);
             
         // this.ctx.beginPath();
         // this.ctx.fillStyle = '#32a852';
