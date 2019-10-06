@@ -812,6 +812,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Game {
     constructor(ctx, canvas) {
         this.canvas = canvas;
@@ -824,7 +826,7 @@ class Game {
         this.level = 1;
         this.paused = false;
         this.bg = new Image();
-        this.bg.src = "../app/floor.png";
+        this.bg.src = `${PATH}/app/floor.png`;
     }
 
     add(object) {
