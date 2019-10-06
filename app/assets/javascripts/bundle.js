@@ -86,6 +86,45 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./javascripts/cursor.js":
+/*!*******************************!*\
+  !*** ./javascripts/cursor.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
+
+class Cursor {
+    constructor(ctx, canvas) {
+        this.ctx = ctx;
+        this.canvas = canvas;
+        this.crosshair = [];
+        this.img = new Image();
+        this.img.src = `${PATH}/app/crosshair.png`;
+    }
+
+    setAim(e) {
+        let temp = this.canvas.getBoundingClientRect();
+        this.crosshair = [e.clientX - temp.x, e.clientY - temp.y];
+    }
+
+    draw() {
+        this.ctx.drawImage(this.img, 335, 268, 61, 64, this.canvas.width / 2, this.canvas.height / 2);
+    }
+
+    update() {
+
+    }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Cursor);
+
+/***/ }),
+
 /***/ "./javascripts/enemy.js":
 /*!******************************!*\
   !*** ./javascripts/enemy.js ***!
@@ -827,6 +866,8 @@ class Game {
         this.paused = false;
         this.bg = new Image();
         this.bg.src = `${PATH}/app/floor.png`;
+        this.bgm = new Audio();
+        this.bgm.src = `${PATH}/app/GungeonUp.mp3`;
     }
 
     add(object) {
@@ -860,6 +901,10 @@ class Game {
         this.particles.push(this.enemies[0]);
         this.paused = false;
         this.started = true;
+
+        this.bgm.load();
+        this.bgm.play();
+        this.bgm.loop = true;
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
@@ -973,6 +1018,7 @@ class HUD {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
 /* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu */ "./javascripts/menu.js");
+/* harmony import */ var _cursor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cursor */ "./javascripts/cursor.js");
 // let canvas = document.createElement('canvas');
 // let width = 1200;
 // let height = 800;
@@ -984,14 +1030,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 window.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
     const menu = new _menu__WEBPACK_IMPORTED_MODULE_1__["default"](ctx, canvas);
+    const cursor = new _cursor__WEBPACK_IMPORTED_MODULE_2__["default"](ctx, canvas);
     document.body.style.cursor = "crosshair";
     menu.draw();
+    // cursor.draw(ctx, canvas);
 })
 
 
@@ -1009,12 +1058,18 @@ window.addEventListener("DOMContentLoaded", () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
 
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
+
 class Menu {
     constructor(ctx, canvas) {
         // this.game = game || new Game(ctx, canvas);
         this.game = null;
         this.ctx = ctx;
         this.canvas = canvas;
+        this.bg = new Image();
+        this.bg.src = `${PATH}/app/floor.png`;
+        this.bgm = new Audio();
+        this.bgm.src = `${PATH}/app/EnterTheGun.mp3`;
     }
 
     gameStart(e) {
@@ -1030,32 +1085,46 @@ class Menu {
 
     draw() {
         
-        this.game = 'aklsndasd'
         this.ctx.save();
         const img = new Image();
-        img.src = "../app/logo.png";
+        img.src = `${PATH}/app/logo.png`;
+
+        // this.bgm.load();
+        // this.bgm.play();
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
-        this.ctx.fillStyle = '#222222';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        // this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2,
-        //                         this.canvas.height / 2 - img.height / 2,
-        //                         img.width, 
-        //                         img.height);
+        // this.ctx.fillStyle = '#222222';
+        // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.bg, 0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2,
+                                this.canvas.height / 2 - img.height,
+                                img.width, 
+                                img.height);
             
         // this.ctx.beginPath();
         // this.ctx.fillStyle = '#32a852';
         // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.stroke();
-        this.ctx.fillStyle = 'yellow';
-        this.ctx.font = "200px Arial";
-        this.ctx.fillText('filler title', 200, 200);
+        // this.ctx.stroke();
+        // this.ctx.fillStyle = 'yellow';
+        // this.ctx.font = "200px Arial";
+        // this.ctx.fillText('filler title', 200, 200);
 
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = "200px Arial";
-        this.ctx.fillText('start game', 400, 400);
+        // this.ctx.fillStyle = 'white';
+        // this.ctx.font = "200px Arial";
+        // this.ctx.fillText('start game', 400, 400);
 
-        this.canvas.addEventListener('click', (e) => {this.gameStart(e)});
+        // this.canvas.addEventListener('click', (e) => {
+        //     // if (e.keyCode === 32) {
+        //         this.gameStart(e)
+        //     }
+        // );
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 32) {
+                this.gameStart(e);
+            }
+        })
 
         this.ctx.restore();
     }

@@ -8,6 +8,7 @@
 // context.fillRect(0, 0, width, height);
 import Game from './game';
 import Menu from './menu';
+import Cursor from './cursor';
 
 window.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('game');
@@ -15,7 +16,9 @@ window.addEventListener("DOMContentLoaded", () => {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
     const menu = new Menu(ctx, canvas);
+    const cursor = new Cursor(ctx, canvas);
     document.body.style.cursor = "crosshair";
     menu.draw();
+    // cursor.draw(ctx, canvas);
 })
 
