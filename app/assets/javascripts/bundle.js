@@ -823,6 +823,8 @@ class Game {
         this.enemies = [];
         this.level = 1;
         this.paused = false;
+        this.bg = new Image();
+        this.bg.src = "../app/floor.png";
     }
 
     add(object) {
@@ -870,12 +872,10 @@ class Game {
     }
 
     loop() {
-        const bg = new Image();
-        bg.src = "../../app/floor.png";
         if (this.started) {
             if (!this.paused) {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.drawImage(this.bg, 0, 0, this.canvas.width, this.canvas.height);
                 this.particles = this.particles.filter(el => {
                     if (el.alive) return el;
                 })
