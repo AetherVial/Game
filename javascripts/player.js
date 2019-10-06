@@ -1,5 +1,6 @@
 import Particle from './particle';
 import EnemyParticle from './enemy_particle';
+import Menu from './menu';
 //     W: 87,
 //     A: 65,
 //     S: 83,
@@ -101,6 +102,12 @@ class Player {
             this.pos = [];
             this.x = null;
             this.y = null;
+            window.game.particles.forEach(el => {
+                el.alive = false;
+            });
+            this.game.started = false;
+            let menu = new Menu(this.ctx, this.canvas);
+            menu.draw();
         }
     }
 
@@ -140,6 +147,9 @@ class Player {
                     return;
                 case 189:
                     this.hp += 200;
+                    return;
+                case 8: 
+                    this.hp = 0;
                     return;
                 default:
                     break;

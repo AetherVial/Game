@@ -50,6 +50,7 @@ class Game {
         this.particles.push(this.player);
         this.particles.push(this.enemies[0]);
         this.paused = false;
+        this.started = true;
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
@@ -59,40 +60,43 @@ class Game {
                     this.paused = false;
                 }
            }
-           
         })
+        this.loop();
     }
 
     loop() {
         const bg = new Image();
-        bg.src = "../app/assets/floor.png";
+        bg.src = "../../app/floor.png";
+        if (this.started) {
+            if (!this.paused) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
+                this.particles = this.particles.filter(el => {
+                    if (el.alive) return el;
+                })
+                this.particles.forEach(el => {
+                    if (el.alive) {
+                        el.draw();
+                        el.update(this.dt);
+                        if (el instanceof Particle) {
+                            this.checkBounds(el);
+                            el.collidesWith();
+                        }
+                        if (el instanceof EnemyParticle) {
+                            this.checkBounds(el);
+                            el.enemyCollidesWith();
+                        }
+                    }
+                })
+                
+                this.hud.draw();
 
-        if (!this.paused) {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
-            this.particles = this.particles.filter(el => {
-                if (el.alive) return el;
-            })
-            this.particles.forEach(el => {
-                if (el.alive) {
-                    el.draw();
-                    el.update(this.dt);
-                    if (el instanceof Particle) {
-                        this.checkBounds(el);
-                        el.collidesWith();
-                    }
-                    if (el instanceof EnemyParticle) {
-                        this.checkBounds(el);
-                        el.enemyCollidesWith();
-                    }
-                }
-            })
-            this.hud.draw();
-            this.dt = Date.now() - this.prevTime;
+                this.dt = Date.now() - this.prevTime;
+            }
+            this.prevTime = Date.now();
+            window.requestAnimationFrame(this.loop);
         }
-        this.prevTime = Date.now();
-        window.requestAnimationFrame(this.loop);
-    }
+    } 
 }
 
 export default Game;

@@ -855,6 +855,7 @@ class Game {
         this.particles.push(this.player);
         this.particles.push(this.enemies[0]);
         this.paused = false;
+        this.started = true;
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
@@ -864,40 +865,43 @@ class Game {
                     this.paused = false;
                 }
            }
-           
         })
+        this.loop();
     }
 
     loop() {
         const bg = new Image();
-        bg.src = "../app/assets/floor.png";
+        bg.src = "../../app/floor.png";
+        if (this.started) {
+            if (!this.paused) {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
+                this.particles = this.particles.filter(el => {
+                    if (el.alive) return el;
+                })
+                this.particles.forEach(el => {
+                    if (el.alive) {
+                        el.draw();
+                        el.update(this.dt);
+                        if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+                            this.checkBounds(el);
+                            el.collidesWith();
+                        }
+                        if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+                            this.checkBounds(el);
+                            el.enemyCollidesWith();
+                        }
+                    }
+                })
+                
+                this.hud.draw();
 
-        if (!this.paused) {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(bg, 0, 0, this.canvas.width, this.canvas.height);
-            this.particles = this.particles.filter(el => {
-                if (el.alive) return el;
-            })
-            this.particles.forEach(el => {
-                if (el.alive) {
-                    el.draw();
-                    el.update(this.dt);
-                    if (el instanceof _particle__WEBPACK_IMPORTED_MODULE_1__["default"]) {
-                        this.checkBounds(el);
-                        el.collidesWith();
-                    }
-                    if (el instanceof _enemy_particle__WEBPACK_IMPORTED_MODULE_2__["default"]) {
-                        this.checkBounds(el);
-                        el.enemyCollidesWith();
-                    }
-                }
-            })
-            this.hud.draw();
-            this.dt = Date.now() - this.prevTime;
+                this.dt = Date.now() - this.prevTime;
+            }
+            this.prevTime = Date.now();
+            window.requestAnimationFrame(this.loop);
         }
-        this.prevTime = Date.now();
-        window.requestAnimationFrame(this.loop);
-    }
+    } 
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Game);
@@ -925,29 +929,30 @@ class HUD {
     }
 
     draw() {
-        this.ctx.save();
-        this.ctx.beginPath();
-        // this.ctx.rect(10,10,game.player.hp * 2, 20);
-        this.ctx.fillStyle = '#32a852';
-        this.ctx.fillRect(10, 10, game.player.hp * 2, 20);
-        this.ctx.stroke();
+        if (this.game.started) {
+            this.ctx.save();
+            this.ctx.beginPath();
 
-        this.ctx.fillStyle = 'yellow';
-        this.ctx.font = "15px Arial";
-        this.ctx.fillText(this.player.hp + " / 300", 20, 25);
+            this.ctx.fillStyle = '#32a852';
+            this.ctx.fillRect(10, 10, this.player.hp * 2, 20);
+            this.ctx.stroke();
 
-        this.ctx.beginPath();
-        // this.ctx.rect(10,30,game.player.charge * 3, 15);
-        this.ctx.fillStyle = '#00ffee';
-        this.ctx.fillRect(10, 30, game.player.charge * 3, 15);
-        this.ctx.stroke();
+            this.ctx.fillStyle = 'yellow';
+            this.ctx.font = "15px Arial";
+            this.ctx.fillText(this.player.hp + " / 300", 20, 25);
 
-        this.ctx.beginPath();
-        // this.ctx.rect(10, this.canvas.height - 60, ((this.canvas.width - 20) * (this.game.enemy.hp / this.game.enemy.og_hp)), 25);
-        this.ctx.fillStyle = '#702413';
-        this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
-        this.ctx.stroke();
-        this.ctx.restore();
+            this.ctx.beginPath();
+            this.ctx.fillStyle = '#00ffee';
+            this.ctx.fillRect(10, 30, this.player.charge * 3, 15);
+            this.ctx.stroke();
+
+            this.ctx.beginPath();
+            this.ctx.fillStyle = '#702413';
+            this.ctx.fillRect(10, this.canvas.height - 60, ((this.canvas.width - 20) *(this.game.enemy.hp / this.game.enemy.og_hp)), 25);
+            this.ctx.stroke();
+
+            this.ctx.restore();
+        }
     }
 }
 
@@ -965,6 +970,7 @@ class HUD {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
+/* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./menu */ "./javascripts/menu.js");
 // let canvas = document.createElement('canvas');
 // let width = 1200;
 // let height = 800;
@@ -975,23 +981,86 @@ __webpack_require__.r(__webpack_exports__);
 // context.fillRect(0, 0, width, height);
 
 
+
 window.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        // ctx.fillStyle = "#222222";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](ctx, canvas);
+    const menu = new _menu__WEBPACK_IMPORTED_MODULE_1__["default"](ctx, canvas);
     document.body.style.cursor = "crosshair";
-    window.game = game;
-    game.start();
-    // alert('wow');
-    game.loop();
+    menu.draw();
 })
 
 
+
+/***/ }),
+
+/***/ "./javascripts/menu.js":
+/*!*****************************!*\
+  !*** ./javascripts/menu.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ "./javascripts/game.js");
+
+class Menu {
+    constructor(ctx, canvas) {
+        // this.game = game || new Game(ctx, canvas);
+        this.game = null;
+        this.ctx = ctx;
+        this.canvas = canvas;
+    }
+
+    gameStart(e) {
+        e.preventDefault();
+        if (!(this.game instanceof _game__WEBPACK_IMPORTED_MODULE_0__["default"])) {
+            window.game = new _game__WEBPACK_IMPORTED_MODULE_0__["default"](this.ctx, this.canvas);
+            this.game = window.game;
+            this.game.start();
+        } else {
+            return;
+        }
+    }
+
+    draw() {
+        
+        this.game = 'aklsndasd'
+        this.ctx.save();
+        const img = new Image();
+        img.src = "../app/logo.png";
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = '#222222';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        // this.ctx.drawImage(img, this.canvas.width / 2 - img.width / 2,
+        //                         this.canvas.height / 2 - img.height / 2,
+        //                         img.width, 
+        //                         img.height);
+            
+        // this.ctx.beginPath();
+        // this.ctx.fillStyle = '#32a852';
+        // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.stroke();
+        this.ctx.fillStyle = 'yellow';
+        this.ctx.font = "200px Arial";
+        this.ctx.fillText('filler title', 200, 200);
+
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = "200px Arial";
+        this.ctx.fillText('start game', 400, 400);
+
+        this.canvas.addEventListener('click', (e) => {this.gameStart(e)});
+
+        this.ctx.restore();
+    }
+    
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Menu);
 
 /***/ }),
 
@@ -1085,6 +1154,8 @@ class Particle {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _particle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./particle */ "./javascripts/particle.js");
 /* harmony import */ var _enemy_particle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enemy_particle */ "./javascripts/enemy_particle.js");
+/* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./menu */ "./javascripts/menu.js");
+
 
 
 //     W: 87,
@@ -1188,6 +1259,12 @@ class Player {
             this.pos = [];
             this.x = null;
             this.y = null;
+            window.game.particles.forEach(el => {
+                el.alive = false;
+            });
+            this.game.started = false;
+            let menu = new _menu__WEBPACK_IMPORTED_MODULE_2__["default"](this.ctx, this.canvas);
+            menu.draw();
         }
     }
 
@@ -1227,6 +1304,9 @@ class Player {
                     return;
                 case 189:
                     this.hp += 200;
+                    return;
+                case 8: 
+                    this.hp = 0;
                     return;
                 default:
                     break;
