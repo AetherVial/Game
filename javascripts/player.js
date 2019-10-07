@@ -106,6 +106,7 @@ class Player {
                 el.alive = false;
             });
             this.game.started = false;
+            this.game.bgm.pause();
             let menu = new Menu(this.ctx, this.canvas);
             menu.draw();
         }

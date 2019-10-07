@@ -7,8 +7,6 @@ class Menu {
         this.ctx = ctx;
         this.canvas = canvas;
 
-        this.bg = new Image();
-        this.bg.src = `${PATH}/app/title.png`;
         this.img = new Image();
         this.img.src = `${PATH}/app/logo.png`;
     }
@@ -25,29 +23,35 @@ class Menu {
     }
 
     draw() {
-        
         this.ctx.save();
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#222';
+        this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        if (this.bg.complete) {
-            this.ctx.drawImage(this.bg, 
-                            0, 
-                            0, 
-                            this.canvas.width, 
-                            this.canvas.height)
-        } else {
-            let ctx = this.ctx;
-            let bg = this.bg;
-            this.bg.onload = function() {
-                ctx.drawImage(bg,
-                    0,
-                    0,
-                    ctx.canvas.width,
-                    ctx.canvas.height)
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "30px Arial";
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText("Press Space to Start",
+                        this.canvas.width / 2,
+                        this.canvas.height / 2);
+
+        if (this.img.complete) {
+            this.ctx.drawImage(this.img,
+                                this.canvas.width / 2 - this.img.width / 2,
+                                this.canvas.height / 2 - this.img.height / 2 - this.canvas.height / 4)
+            } else {
+                let ctx = this.ctx;
+                let img = this.img;
+                this.img.onload = function() {
+                    ctx.drawImage(img,
+                        ctx.canvas.width / 2 -img.width / 2,
+                        ctx.canvas.height / 2 -img.height / 2 - ctx.canvas.height / 4)
+                }
             }
-        }
+        
+
         
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 32) {

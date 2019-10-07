@@ -92,6 +92,7 @@ class Boss2 extends Boss{
     }
 
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
@@ -100,6 +101,7 @@ class Boss2 extends Boss{
         this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 

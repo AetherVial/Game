@@ -375,6 +375,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
     }
 
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
@@ -383,6 +384,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
         this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
@@ -526,7 +528,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.r = 0;
             this.game.enemies.shift();
             this.game.enemies.push(new Boss3(this.game, this.game.level));
-            this.game.player.dmg += 100;
+            this.game.player.dmg = this.game.player.dmg * 1.1;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
@@ -535,6 +537,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
     }
 
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
@@ -543,6 +546,7 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
@@ -720,7 +724,6 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.game.enemies.shift();
             this.game.level = this.game.level + 1;
             this.game.enemies.push(new Boss4(this.game, this.game.level));
-            this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
@@ -1089,8 +1092,6 @@ class Menu {
         this.ctx = ctx;
         this.canvas = canvas;
 
-        this.bg = new Image();
-        this.bg.src = `${PATH}/app/title.png`;
         this.img = new Image();
         this.img.src = `${PATH}/app/logo.png`;
     }
@@ -1107,29 +1108,35 @@ class Menu {
     }
 
     draw() {
-        
         this.ctx.save();
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#222';
+        this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        if (this.bg.complete) {
-            this.ctx.drawImage(this.bg, 
-                            0, 
-                            0, 
-                            this.canvas.width, 
-                            this.canvas.height)
-        } else {
-            let ctx = this.ctx;
-            let bg = this.bg;
-            this.bg.onload = function() {
-                ctx.drawImage(bg,
-                    0,
-                    0,
-                    ctx.canvas.width,
-                    ctx.canvas.height)
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = "30px Arial";
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText("Press Space to Start",
+                        this.canvas.width / 2,
+                        this.canvas.height / 2);
+
+        if (this.img.complete) {
+            this.ctx.drawImage(this.img,
+                                this.canvas.width / 2 - this.img.width / 2,
+                                this.canvas.height / 2 - this.img.height / 2 - this.canvas.height / 4)
+            } else {
+                let ctx = this.ctx;
+                let img = this.img;
+                this.img.onload = function() {
+                    ctx.drawImage(img,
+                        ctx.canvas.width / 2 -img.width / 2,
+                        ctx.canvas.height / 2 -img.height / 2 - ctx.canvas.height / 4)
+                }
             }
-        }
+        
+
         
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 32) {
@@ -1345,6 +1352,7 @@ class Player {
                 el.alive = false;
             });
             this.game.started = false;
+            this.game.bgm.pause();
             let menu = new _menu__WEBPACK_IMPORTED_MODULE_2__["default"](this.ctx, this.canvas);
             menu.draw();
         }

@@ -156,7 +156,6 @@ class Boss4 extends Boss {
             this.game.enemies.shift();
             this.game.level = this.game.level + 1;
             this.game.enemies.push(new Boss4(this.game, this.game.level));
-            this.game.player.dmg += 100;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);

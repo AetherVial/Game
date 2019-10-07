@@ -122,7 +122,7 @@ class Boss3 extends Boss {
             this.r = 0;
             this.game.enemies.shift();
             this.game.enemies.push(new Boss3(this.game, this.game.level));
-            this.game.player.dmg += 100;
+            this.game.player.dmg = this.game.player.dmg * 1.1;
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
@@ -131,6 +131,7 @@ class Boss3 extends Boss {
     }
 
     draw() {
+        this.ctx.save();
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         this.ctx.strokeStyle = "#000";
@@ -139,6 +140,7 @@ class Boss3 extends Boss {
         this.ctx.shadowColor = "white";
         this.ctx.fill();
         this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
