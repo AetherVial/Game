@@ -108,17 +108,6 @@ class Boss {
 
     draw() {
         this.ctx.save();
-        // this.ctx.beginPath();
-        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-
-        // this.ctx.shadowColor = 'white';
-        // this.ctx.shadowBlur = 30;
-
-        // this.ctx.strokeStyle = "#FF0000";
-        // this.ctx.lineWidth = 5;
-        // this.ctx.fillStyle = "rgba(0,0,0,0)";
-        // this.ctx.shadowColor = "#FF0000";
-
         this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
 
         this.ctx.stroke();

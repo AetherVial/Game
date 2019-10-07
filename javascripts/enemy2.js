@@ -1,5 +1,7 @@
 import EnemyParticle from './enemy_particle';
 import Boss from './enemy';
+
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss2 extends Boss{
     constructor(game, level) {
         super(game, level);
@@ -16,6 +18,13 @@ class Boss2 extends Boss{
         this.up = true;
         this.loaded = true;
         this.loaded2 = true;
+        
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/demon-idle.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -33,9 +42,24 @@ class Boss2 extends Boss{
         } else if (this.y <= this.r) {
             this.up = false;
         }
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 160;
+                if (this.coords_x === 800) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 160;
+                if (this.coords_x === 160) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
         this.move(dt);
         this.fire2();
         this.fire();
+        this.frames = this.frames + 1;
     }
 
     checkDead() {
@@ -93,14 +117,15 @@ class Boss2 extends Boss{
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
-        this.ctx.fillStyle = "#000";
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
-        this.ctx.fill();
-        this.ctx.closePath();
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.strokeStyle = "#000";
+        // this.ctx.fillStyle = "#000";
+        // this.ctx.shadowBlur = 5;
+        // this.ctx.shadowColor = "white";
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 160, 144, this.x - 150, this.y - 150, 300, 300);
+        // this.ctx.fill();
+        // this.ctx.closePath();
         this.ctx.restore();
     }
 }

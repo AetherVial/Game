@@ -246,17 +246,6 @@ class Boss {
 
     draw() {
         this.ctx.save();
-        // this.ctx.beginPath();
-        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-
-        // this.ctx.shadowColor = 'white';
-        // this.ctx.shadowBlur = 30;
-
-        // this.ctx.strokeStyle = "#FF0000";
-        // this.ctx.lineWidth = 5;
-        // this.ctx.fillStyle = "rgba(0,0,0,0)";
-        // this.ctx.shadowColor = "#FF0000";
-
         this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
 
         this.ctx.stroke();
@@ -283,6 +272,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enemy__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enemy */ "./javascripts/enemy.js");
 
 
+
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
     constructor(game, level) {
         super(game, level);
@@ -299,6 +290,13 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
         this.up = true;
         this.loaded = true;
         this.loaded2 = true;
+        
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/demon-idle.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -316,9 +314,24 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
         } else if (this.y <= this.r) {
             this.up = false;
         }
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 160;
+                if (this.coords_x === 800) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 160;
+                if (this.coords_x === 160) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
         this.move(dt);
         this.fire2();
         this.fire();
+        this.frames = this.frames + 1;
     }
 
     checkDead() {
@@ -376,14 +389,15 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
-        this.ctx.fillStyle = "#000";
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
-        this.ctx.fill();
-        this.ctx.closePath();
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.strokeStyle = "#000";
+        // this.ctx.fillStyle = "#000";
+        // this.ctx.shadowBlur = 5;
+        // this.ctx.shadowColor = "white";
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 160, 144, this.x - 150, this.y - 150, 300, 300);
+        // this.ctx.fill();
+        // this.ctx.closePath();
         this.ctx.restore();
     }
 }
@@ -1285,7 +1299,7 @@ class Player {
         this.charge = 0;
         this.alive = true;
         this.powerUp1 = false;
-        this.dmg = 100;
+        this.dmg = 1000;
     }
 
     move(x, y) {
