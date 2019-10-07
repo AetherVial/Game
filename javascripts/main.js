@@ -16,9 +16,6 @@ window.addEventListener("DOMContentLoaded", () => {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
     const menu = new Menu(ctx, canvas);
-    const cursor = new Cursor(ctx, canvas);
-    document.body.style.cursor = "crosshair";
     menu.draw();
-    // cursor.draw(ctx, canvas);
 })
 

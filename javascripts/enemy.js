@@ -27,13 +27,11 @@ class Boss {
 
     move(dt) {
         if (this.up) {
-            this.y = this.y - this.y_speed * dt
+            this.y = this.y - (this.y_speed * .75) * dt
         } else {
-            this.y = this.y + this.y_speed * dt
+            this.y = this.y + (this.y_speed * .75) * dt
         }
     }
-
-
 
     update(dt) {
         this.checkDead();

@@ -1,22 +1,9 @@
 body {
     background-color: #000;
-    /* display: flex; */
-    /* justify-content: left; */
-    /* justify-content: center; */
-    /* align-items: center; */
     height: 100%;
     width: 100%;
     padding: 0;
-    /* border: 3px solid blue; */
     margin: 0;
     scroll-behavior: none;
     overflow: hidden;
-}
-canvas {
-    /* background-image: url('./app/assets/floor.png') no-repeat center center fixed; */
-    /* background-repeat: no-repeat; */
-    /* background-size: cover; */
-    /* height: 100%;
-    width: 100%; */
-    /* color: red; */
 }
