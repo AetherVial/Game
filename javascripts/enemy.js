@@ -73,7 +73,7 @@ class Boss {
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
-            }, 10000)
+            }, 5000)
         }   
     }
 

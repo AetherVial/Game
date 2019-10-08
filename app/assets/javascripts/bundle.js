@@ -211,7 +211,7 @@ class Boss {
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
-            }, 10000)
+            }, 5000)
         }   
     }
 
@@ -352,7 +352,7 @@ class Boss2 extends _enemy__WEBPACK_IMPORTED_MODULE_1__["default"]{
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
                 console.log(this.game.enemies);
-            }, 10000)
+            }, 5000)
         }
     }
 
@@ -422,6 +422,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor(game, level) {
         super(game, level);
@@ -445,6 +446,13 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.loaded = true;
         // this.loaded2 = true;
         this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2]
+
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/sorcerer_villain.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -529,9 +537,26 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.down = false;
             this.right = true;
         }
+
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 200;
+                if (this.coords_x === 1800) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 200;
+                if (this.coords_x === 200) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
+
         this.move(dt);
         this.fire();
         this.checkDead();
+        this.frames += 1;
     }
     checkDead() {
         if (this.hp <= 0) {
@@ -546,20 +571,22 @@ class Boss3 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
-            }, 10000)
+            }, 5000)
         }
     }
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
-        this.ctx.fillStyle = "#000";
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
-        this.ctx.fill();
-        this.ctx.closePath();
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.strokeStyle = "#000";
+        // this.ctx.fillStyle = "#000";
+        // this.ctx.shadowBlur = 5;
+        // this.ctx.shadowColor = "white";
+        // this.ctx.fill();
+        // this.ctx.closePath();
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 200, 200, this.x - 100, this.y - 100, 300, 300);
+
         this.ctx.restore();
     }
 }
@@ -584,12 +611,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor(game, level) {
         super(game);
         this.hp = 9001 * level;
         this.og_hp = 9001 * level;
-        this.r = 150;
+        this.r = 100;
         this.pos = [game.canvas.width - 150, game.canvas.height -150];
         this.x = this.pos[0]
         this.y = this.pos[1]
@@ -609,6 +637,13 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.loaded3 = true;
         this.aim = [this.game.player.x, this.game.player.y];
         this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2];
+
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/enemy4.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -722,11 +757,28 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this.down = false;
             this.right = true;
         }
+
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 80;
+                if (this.coords_x === 880) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 80;
+                if (this.coords_x === 80) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
+
         this.move(dt);
         this.fire();
         this.fire2();
         this.fire3();
         this.checkDead();
+        this.frames += 1;
     }
     checkDead() {
         if (this.hp <= 0) {
@@ -741,19 +793,23 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
-            }, 10000)
+            }, 5000)
         }
     }
 
     draw() {
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
+
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.strokeStyle = "#000";
         this.ctx.fillStyle = "#000";
         this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
-        this.ctx.fill();
-        this.ctx.closePath();
+
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
+
+        // this.ctx.shadowColor = "white";
+        // this.ctx.fill();
+        // this.ctx.closePath();
     }
 }
 
@@ -909,8 +965,6 @@ class Game {
         this.paused = false;
         this.bg = new Image();
         this.bg.src = `${PATH}/app/floor.png`;
-        this.bgm = new Audio();
-        this.bgm.src = `${PATH}/app/GungeonUp.mp3`;
     }
 
     add(object) {
@@ -944,10 +998,6 @@ class Game {
         this.particles.push(this.enemies[0]);
         this.paused = false;
         this.started = true;
-
-        this.bgm.load();
-        this.bgm.play();
-        this.bgm.loop = true;
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
@@ -1074,12 +1124,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 window.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-    const menu = new _menu__WEBPACK_IMPORTED_MODULE_1__["default"](ctx, canvas);
+    const bgm = new Audio();
+            bgm.src = `${PATH}/app/GungeonUp.mp3`;
+            bgm.load();
+            bgm.play();
+            bgm.loop = true;
+    
+    
+        const menu = new _menu__WEBPACK_IMPORTED_MODULE_1__["default"](ctx, canvas);
+
+
     menu.draw();
 })
 
@@ -1272,7 +1332,7 @@ __webpack_require__.r(__webpack_exports__);
 //     SPACE: 32,
 //     MOUSE_LEFT: 10000,
 //     MOUSE_RIGHT: 10002,
-
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Player {
     constructor(game) {
         this.game = game;
@@ -1300,6 +1360,13 @@ class Player {
         this.alive = true;
         this.powerUp1 = false;
         this.dmg = 1000;
+
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/stitchFire.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(x, y) {
@@ -1366,7 +1433,6 @@ class Player {
                 el.alive = false;
             });
             this.game.started = false;
-            this.game.bgm.pause();
             let menu = new _menu__WEBPACK_IMPORTED_MODULE_2__["default"](this.ctx, this.canvas);
             menu.draw();
         }
@@ -1426,19 +1492,22 @@ class Player {
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
+        // this.ctx.beginPath();
 
-        this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+        // this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
 
-        this.ctx.strokeStyle = "#00f7ff";
-        this.ctx.lineWidth = 5;
-        this.ctx.fillStyle = "#00f7ff";
+        // this.ctx.strokeStyle = "#00f7ff";
+        // this.ctx.lineWidth = 5;
+        // this.ctx.fillStyle = "#00f7ff";
 
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "#00f7ff";
 
-        this.ctx.fill();
-        this.ctx.closePath();
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 62, 43,
+                             this.x-20, this.y-20, 62, 43);
+
+        // this.ctx.fill();
+        // this.ctx.closePath();
         this.ctx.restore();
     }
 
@@ -1467,7 +1536,22 @@ class Player {
         if (this.charge < 100) {
             this.charge += .02;
         }
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 62;
+                if (this.coords_x === 186) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 62;
+                if (this.coords_x === 62) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
         this.checkDead()
+        this.frames += 1;
     }
 }
 

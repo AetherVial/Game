@@ -2,12 +2,13 @@ import Boss from './enemy';
 import EnemyParticle from './enemy_particle';
 import ExplodingEnemyParticle from './enemy_exposion';
 
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Boss4 extends Boss {
     constructor(game, level) {
         super(game);
         this.hp = 9001 * level;
         this.og_hp = 9001 * level;
-        this.r = 150;
+        this.r = 100;
         this.pos = [game.canvas.width - 150, game.canvas.height -150];
         this.x = this.pos[0]
         this.y = this.pos[1]
@@ -27,6 +28,13 @@ class Boss4 extends Boss {
         this.loaded3 = true;
         this.aim = [this.game.player.x, this.game.player.y];
         this.center = [this.game.canvas.width / 2, this.game.canvas.height / 2];
+
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/enemy4.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(dt) {
@@ -140,11 +148,28 @@ class Boss4 extends Boss {
             this.down = false;
             this.right = true;
         }
+
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 80;
+                if (this.coords_x === 880) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 80;
+                if (this.coords_x === 80) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
+
         this.move(dt);
         this.fire();
         this.fire2();
         this.fire3();
         this.checkDead();
+        this.frames += 1;
     }
     checkDead() {
         if (this.hp <= 0) {
@@ -159,19 +184,23 @@ class Boss4 extends Boss {
             setTimeout(() => {
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
-            }, 10000)
+            }, 5000)
         }
     }
 
     draw() {
-        this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
-        this.ctx.strokeStyle = "#000";
+
+        // this.ctx.beginPath();
+        // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
+        // this.ctx.strokeStyle = "#000";
         this.ctx.fillStyle = "#000";
         this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
-        this.ctx.fill();
-        this.ctx.closePath();
+
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
+
+        // this.ctx.shadowColor = "white";
+        // this.ctx.fill();
+        // this.ctx.closePath();
     }
 }
 

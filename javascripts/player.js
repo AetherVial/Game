@@ -12,7 +12,7 @@ import Menu from './menu';
 //     SPACE: 32,
 //     MOUSE_LEFT: 10000,
 //     MOUSE_RIGHT: 10002,
-
+const PATH = document.URL.substr(0, document.URL.lastIndexOf('/'));
 class Player {
     constructor(game) {
         this.game = game;
@@ -40,6 +40,13 @@ class Player {
         this.alive = true;
         this.powerUp1 = false;
         this.dmg = 1000;
+
+        this.sheet = new Image();
+        this.sheet.src = `${PATH}/app/stitchFire.png`;
+        this.coords_x = 0;
+        this.coords_y = 0;
+        this.forward = true;
+        this.frames = 0;
     }
 
     move(x, y) {
@@ -106,7 +113,6 @@ class Player {
                 el.alive = false;
             });
             this.game.started = false;
-            this.game.bgm.pause();
             let menu = new Menu(this.ctx, this.canvas);
             menu.draw();
         }
@@ -166,19 +172,22 @@ class Player {
 
     draw() {
         this.ctx.save();
-        this.ctx.beginPath();
+        // this.ctx.beginPath();
 
-        this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+        // this.ctx.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
 
-        this.ctx.strokeStyle = "#00f7ff";
-        this.ctx.lineWidth = 5;
-        this.ctx.fillStyle = "#00f7ff";
+        // this.ctx.strokeStyle = "#00f7ff";
+        // this.ctx.lineWidth = 5;
+        // this.ctx.fillStyle = "#00f7ff";
 
         this.ctx.shadowBlur = 5;
         this.ctx.shadowColor = "#00f7ff";
 
-        this.ctx.fill();
-        this.ctx.closePath();
+        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 62, 43,
+                             this.x-20, this.y-20, 62, 43);
+
+        // this.ctx.fill();
+        // this.ctx.closePath();
         this.ctx.restore();
     }
 
@@ -207,7 +216,22 @@ class Player {
         if (this.charge < 100) {
             this.charge += .02;
         }
+        if (this.frames === 10) {
+            if (this.forward) {
+                this.coords_x = this.coords_x + 62;
+                if (this.coords_x === 186) {
+                    this.forward = !this.forward;
+                }
+            } else if (!this.forward) {
+                this.coords_x = this.coords_x - 62;
+                if (this.coords_x === 62) {
+                    this.forward = true;
+                }
+            }
+            this.frames = 0;
+        }
         this.checkDead()
+        this.frames += 1;
     }
 }
 

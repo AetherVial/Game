@@ -80,7 +80,7 @@ class Boss2 extends Boss{
                 this.game.enemy = this.game.enemies[0];
                 this.game.particles.push(this.game.enemy);
                 console.log(this.game.enemies);
-            }, 10000)
+            }, 5000)
         }
     }
 

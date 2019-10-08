@@ -22,8 +22,6 @@ class Game {
         this.paused = false;
         this.bg = new Image();
         this.bg.src = `${PATH}/app/floor.png`;
-        this.bgm = new Audio();
-        this.bgm.src = `${PATH}/app/GungeonUp.mp3`;
     }
 
     add(object) {
@@ -57,10 +55,6 @@ class Game {
         this.particles.push(this.enemies[0]);
         this.paused = false;
         this.started = true;
-
-        this.bgm.load();
-        this.bgm.play();
-        this.bgm.loop = true;
 
         document.addEventListener('keydown', (e) => {
             if (e.keyCode === 80) {
