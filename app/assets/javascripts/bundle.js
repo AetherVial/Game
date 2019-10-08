@@ -246,8 +246,19 @@ class Boss {
 
     draw() {
         this.ctx.save();
-        
+        if (this.sheet.complete) {
             this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
+        } else {
+            let ctx = this.ctx;
+            let sheet = this.sheet;
+            ctx.drawImage(
+                sheet, 
+                this.coords_x, 
+                this.coords_y, 
+                80, 80, 
+                this.x - 150, 
+                this.y - 150, 300, 300);
+        }
 
         // this.ctx.stroke();
         // this.ctx.fill();
