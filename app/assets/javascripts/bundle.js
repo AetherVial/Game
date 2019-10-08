@@ -1143,11 +1143,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const ctx = canvas.getContext('2d');
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-    const bgm = new Audio();
-            bgm.src = `${PATH}/app/GungeonUp.mp3`;
-            bgm.load();
-            bgm.play();
-            bgm.loop = true;
+
+            // const bgm = new Audio();
+    //         bgm.src = `${PATH}/app/GungeonUp.mp3`;
+    //         bgm.load();
+    //         bgm.play();
+            // bgm.loop = true;
     
     
         const menu = new _menu__WEBPACK_IMPORTED_MODULE_1__["default"](ctx, canvas);
