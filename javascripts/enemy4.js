@@ -189,18 +189,19 @@ class Boss4 extends Boss {
     }
 
     draw() {
-
+        this.ctx.save();
         // this.ctx.beginPath();
         // this.ctx.arc(this.x, this.y, this.r, 2 * Math.PI, false);
         // this.ctx.strokeStyle = "#000";
         this.ctx.fillStyle = "#000";
         this.ctx.shadowBlur = 5;
 
-        this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
+            this.ctx.drawImage(this.sheet, this.coords_x, this.coords_y, 80, 80, this.x - 150, this.y - 150, 300, 300);
 
         // this.ctx.shadowColor = "white";
         // this.ctx.fill();
         // this.ctx.closePath();
+        this.ctx.restore();
     }
 }
 
