@@ -66,7 +66,7 @@ class Boss4 extends Boss {
 
                     ((this.game.player.y - this.y) / (this.dist(this.aim, [this.x, this.y]))) * 2
                 ],
-                10 * this.level)
+                15 * this.level)
             this.game.add(bullet);
             this.loaded = false;
             setTimeout(() => {

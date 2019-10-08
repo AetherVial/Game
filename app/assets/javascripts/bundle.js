@@ -687,7 +687,7 @@ class Boss4 extends _enemy__WEBPACK_IMPORTED_MODULE_0__["default"] {
 
                     ((this.game.player.y - this.y) / (this.dist(this.aim, [this.x, this.y]))) * 2
                 ],
-                10 * this.level)
+                15 * this.level)
             this.game.add(bullet);
             this.loaded = false;
             setTimeout(() => {
@@ -1440,7 +1440,7 @@ class Player {
         this.charge = 0;
         this.alive = true;
         this.powerUp1 = false;
-        this.dmg = 1000;
+        this.dmg = 100;
 
         this.sheet = new Image();
         this.sheet.src = `${PATH}/app/stitchFire.png`;

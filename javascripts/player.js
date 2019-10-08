@@ -39,7 +39,7 @@ class Player {
         this.charge = 0;
         this.alive = true;
         this.powerUp1 = false;
-        this.dmg = 1000;
+        this.dmg = 100;
 
         this.sheet = new Image();
         this.sheet.src = `${PATH}/app/stitchFire.png`;
