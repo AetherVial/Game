@@ -1268,7 +1268,7 @@ class Menu {
 
         if (this.leftClick.complete) {
             this.ctx.drawImage(this.leftClick,
-                this.canvas.width / 5,
+                this.canvas.width * .7,
                 this.canvas.height - this.leftClick.height / 5 - 100,
                 this.leftClick.width / 5,
                 this.leftClick.height / 5)
@@ -1277,10 +1277,10 @@ class Menu {
             let leftClick = this.leftClick;
             this.leftClick.onload = function () {
                 ctx.drawImage(leftClick,
-                    ctx.canvas.width / 5,
-                    ctx.canvas.height - leftClick.height / 5 - 100,
-                    leftClick.width / 5,
-                    leftClick.height / 5)
+                    ctx.canvas.width,
+                    ctx.canvas.height - leftClick.height - 100,
+                    leftClick.width * 1.5,
+                    leftClick.height * 1.5)
             }
         }
 

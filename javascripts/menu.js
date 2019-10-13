@@ -10,11 +10,11 @@ class Menu {
         this.img = new Image();
         this.img.src = `${PATH}/app/logo.png`;
 
-        this.qwe = new Image();
-        this.qwe.src = `${PATH}/app/QWEASD.png`;
+        // this.qwe = new Image();
+        // this.qwe.src = `${PATH}/app/QWEASD.png`;
 
-        this.leftClick = new Image();
-        this.leftClick.src = `${PATH}/app/leftClick.png`;
+        // this.leftClick = new Image();
+        // this.leftClick.src = `${PATH}/app/leftClick.png`;
     }
 
     gameStart(e) {
@@ -75,49 +75,41 @@ class Menu {
             this.canvas.width / 2,
             this.canvas.height - 100);
 
-        if (this.qwe.complete) {
-            this.ctx.drawImage(this.qwe,
-                this.canvas.width / 5,
-                this.canvas.height - this.qwe.height / 5 - 100,
-                this.qwe.width / 5,
-                this.qwe.height / 5)
-        } else {
-            let ctx = this.ctx;
-            let qwe = this.qwe;
-            this.qwe.onload = function () {
-                ctx.drawImage(qwe,
-                    ctx.canvas.width / 5,
-                    ctx.canvas.height - qwe.height / 5 - 100,
-                    qwe.width / 5,
-                    qwe.height / 5)
-            }
-        }
+        // if (this.qwe.complete) {
+        //     this.ctx.drawImage(this.qwe,
+        //         this.canvas.width / 5,
+        //         this.canvas.height - this.qwe.height / 5 - 100,
+        //         this.qwe.width / 5,
+        //         this.qwe.height / 5)
+        // } else {
+        //     let ctx = this.ctx;
+        //     let qwe = this.qwe;
+        //     this.qwe.onload = function () {
+        //         ctx.drawImage(qwe,
+        //             ctx.canvas.width / 5,
+        //             ctx.canvas.height - qwe.height / 5 - 100,
+        //             qwe.width / 5,
+        //             qwe.height / 5)
+        //     }
+        // }
 
-        if (this.leftClick.complete) {
-            this.ctx.drawImage(this.leftClick,
-                this.canvas.width / 5,
-                this.canvas.height - this.leftClick.height / 5 - 100,
-                this.leftClick.width / 5,
-                this.leftClick.height / 5)
-        } else {
-            let ctx = this.ctx;
-            let leftClick = this.leftClick;
-            this.leftClick.onload = function () {
-                ctx.drawImage(leftClick,
-                    ctx.canvas.width / 5,
-                    ctx.canvas.height - leftClick.height / 5 - 100,
-                    leftClick.width / 5,
-                    leftClick.height / 5)
-            }
-        }
-
-        // this.ctx.fillStyle = '#fff';
-        // this.ctx.font = "30px Arial";
-        // this.ctx.textAlign = 'center';
-        // this.ctx.fillText("Press Space to Start",
-        //     this.canvas.width / 2,
-        //     this.canvas.height / 2);
-        
+        // if (this.leftClick.complete) {
+        //     this.ctx.drawImage(this.leftClick,
+        //         this.canvas.width * .7,
+        //         this.canvas.height - this.leftClick.height / 5 - 100,
+        //         this.leftClick.width / 5,
+        //         this.leftClick.height / 5)
+        // } else {
+        //     let ctx = this.ctx;
+        //     let leftClick = this.leftClick;
+        //     this.leftClick.onload = function () {
+        //         ctx.drawImage(leftClick,
+        //             ctx.canvas.width,
+        //             ctx.canvas.height - leftClick.height - 100,
+        //             leftClick.width * 1.5,
+        //             leftClick.height * 1.5)
+        //     }
+        // }
 
         
         document.addEventListener('keydown', (e) => {
