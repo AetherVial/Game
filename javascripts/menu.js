@@ -68,7 +68,7 @@ class Menu {
         this.ctx.fillText("MOUSE MOVE - Aim",
             this.canvas.width / 2,
             this.canvas.height - 100);
-        this.ctx.fillText("P - Dash in Pause",
+        this.ctx.fillText("P - Pause / Unpause ",
             this.canvas.width / 2,
             this.canvas.height - 50);
         
