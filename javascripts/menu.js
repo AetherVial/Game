@@ -25,17 +25,16 @@ class Menu {
     draw() {
         this.ctx.save();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.shadowBlur = 5;
-        this.ctx.shadowColor = "white";
+        
         
         this.ctx.fillStyle = '#fff';
         this.ctx.font = "30px Arial";
         this.ctx.textAlign = 'center';
-        this.ctx.fillText("Press Space to Start",
-                        this.canvas.width / 2,
-                        this.canvas.height / 2);
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = "white";
 
         if (this.img.complete) {
             this.ctx.drawImage(this.img,
@@ -50,6 +49,9 @@ class Menu {
                         ctx.canvas.height / 2 -img.height / 2 - ctx.canvas.height / 4)
                 }
             }
+        this.ctx.fillText("Press Space to Start",
+            this.canvas.width / 2,
+            this.canvas.height / 2);
 
         this.ctx.font = "20px Arial";
         this.ctx.textAlign = 'center';
